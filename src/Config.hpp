@@ -1,5 +1,5 @@
-#ifndef CONFIG_H
-#define CONFIG_H
+#ifndef CONFIG_HPP
+#define CONFIG_HPP
 
 #define SCREEN_WIDTH 640
 #define SCREEN_HEIGHT 480

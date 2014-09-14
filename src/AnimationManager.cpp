@@ -1,10 +1,10 @@
-#include "AnimationManager.h"
+#include "AnimationManager.hpp"
 
 #include "SDL/SDL.h"
 
 #include <iostream>
 
-#include "Viewer.h"
+#include "Viewer.hpp"
 
 AnimationManager::AnimationManager(Viewer* viewer) : _viewer(viewer), _state(0), _onMove(true), _onExit(false) {
   _pixelGrid = new Pixel*[SCREEN_WIDTH];

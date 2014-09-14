@@ -1,7 +1,7 @@
-#ifndef TYPES_H
-#define TYPES_H
+#ifndef TYPES_HPP
+#define TYPES_HPP
 
-#include "Config.h"
+#include "Config.hpp"
 
 struct Pixel {
   int r;

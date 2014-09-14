@@ -1,8 +1,8 @@
-#ifndef VIEWER_H
-#define VIEWER_H
+#ifndef VIEWER_HPP
+#define VIEWER_HPP
 
-#include "Config.h"
-#include "Types.h"
+#include "Config.hpp"
+#include "Types.hpp"
 
 class SDL_Surface;
 

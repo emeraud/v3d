@@ -1,8 +1,10 @@
-#ifndef ANIMATIONMANAGER_H
-#define ANIMATIONMANAGER_H
+#ifndef ANIMATIONMANAGER_HPP
+#define ANIMATIONMANAGER_HPP
 
-#include "Types.h"
 #include "SDL/SDL.h"
+
+#include "Types.hpp"
+#include "Scene3D.hpp"
 
 class Viewer;
 
@@ -26,6 +28,7 @@ class AnimationManager {
   private:
     Viewer*       _viewer;
     Pixel**       _pixelGrid;
+    Scene3D       _scene;
     int           _state;
     bool          _onMove;
     bool          _onExit;

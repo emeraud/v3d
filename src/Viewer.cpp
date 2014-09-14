@@ -1,4 +1,4 @@
-#include "Viewer.h"
+#include "Viewer.hpp"
 
 #include <SDL/SDL.h>
 
