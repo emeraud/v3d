@@ -5,6 +5,9 @@
 #include <iostream>
 
 #include "Viewer.hpp"
+#include "Connector3D.hpp" // FIXME temp
+#include "Tessellation3D.hpp"
+
 
 AnimationManager::AnimationManager(Viewer* viewer) : _viewer(viewer), _state(0), _onMove(true), _onExit(false) {
   _pixelGrid = new Pixel*[SCREEN_WIDTH];
@@ -16,6 +19,14 @@ AnimationManager::AnimationManager(Viewer* viewer) : _viewer(viewer), _state(0),
       _pixelGrid[i][j].b = 0;
     }
   }
+
+  // TEMP, TODO FIXME
+  Connector3D connector;
+  Tessellation3D* tessellation;
+  tessellation = connector.parseFile("/home/val/Documents/dev/3d/raytracer/models/bunny.off");
+  delete tessellation;
+  tessellation = connector.parseFile("/home/val/Documents/dev/3d/raytracer/models/fandisk.off");
+  delete tessellation;
 }
 
 

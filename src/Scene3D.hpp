@@ -3,15 +3,16 @@
 
 #include <vector>
 
-#include "Object3D.hpp"
+class Object3D;
 
 class Scene3D {
   public:
     Scene3D();
     ~Scene3D();
 
+
   private:
-    std::vector<Object3D> _objects;
+    std::vector<Object3D*>      _objects;
 
 };
 
