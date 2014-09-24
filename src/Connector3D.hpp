@@ -7,11 +7,10 @@ class Tessellation3D;
 
 class Connector3D {
   public:
-    Connector3D();
-    ~Connector3D();
+    static Tessellation3D* parseFile(const std::string& fileName);
 
-  public:
-    Tessellation3D* parseFile(const std::string& fileName);
+  private:
+    Connector3D();
 };
 
 #endif

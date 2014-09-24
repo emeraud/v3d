@@ -3,13 +3,17 @@
 #include "SDL/SDL.h"
 
 #include <iostream>
+#include <vector>
 
 #include "Viewer.hpp"
 #include "Connector3D.hpp" // FIXME temp
 #include "Tessellation3D.hpp"
+#include "KDTree.hpp"
+#include "Light.hpp"
+#include "BRDF.hpp"
 
 
-AnimationManager::AnimationManager(Viewer* viewer) : _viewer(viewer), _state(0), _onMove(true), _onExit(false) {
+AnimationManager::AnimationManager(Viewer* viewer) : _viewer(viewer), _onMove(true), _onExit(false) {
   _pixelGrid = new Pixel*[SCREEN_WIDTH];
   for (int i=0; i<SCREEN_WIDTH; i++) {
     _pixelGrid[i] = new Pixel[SCREEN_HEIGHT];
@@ -20,13 +24,8 @@ AnimationManager::AnimationManager(Viewer* viewer) : _viewer(viewer), _state(0),
     }
   }
 
-  // TEMP, TODO FIXME
-  Connector3D connector;
-  Tessellation3D* tessellation;
-  tessellation = connector.parseFile("/home/val/Documents/dev/3d/raytracer/models/bunny.off");
-  delete tessellation;
-  tessellation = connector.parseFile("/home/val/Documents/dev/3d/raytracer/models/fandisk.off");
-  delete tessellation;
+  _scene.addLight(Light(Vec3Df(2.f, 2.f, 2.f), Vec3Df(1.f, 1.f, 1.f), 1.f));
+  _scene.addObject(new Object3D(Connector3D::parseFile("/home/val/Documents/dev/3d/raytracer/models/bunny.off")));
 }
 
 
@@ -38,6 +37,16 @@ AnimationManager::~AnimationManager() {
 }
 
 void AnimationManager::run() {
+  _viewer->update(getNextImage());
+  while (true) {
+    if (_onExit) {
+      break;
+    } else {
+      waitEvents();
+    }
+  }
+
+/*
   while (true) {
     if (_onExit) {
       break;
@@ -48,17 +57,36 @@ void AnimationManager::run() {
       waitEvents();
     }
   }
+*/
 }
 
 Pixel** AnimationManager::getNextImage() {
+  // TODO add configurable observator position & light
+  const Object3D* object = _scene.getObjects()[0];
+  Vec3Df obsPos(-2.f, 0.f, 0.f);
+  Vec3Df obsDir(1.0f, 0.f, 0.f);
+  Vec3Df obsRight(0.f, 1.f, 0.f);
+  Vec3Df obsUp(0.f, 0.f, 1.f);
+
   for (int i=0; i<SCREEN_WIDTH; i++) {
     for (int j=0; j<SCREEN_HEIGHT; j++) {
-      _pixelGrid[i][j].r = i%256;
-      _pixelGrid[i][j].g = j%256;
-      _pixelGrid[i][j].b = (i+j+_state)%256;
+      // TODO FIXME: should be optimized (!) and configurable
+      Vec3Df stepX = (float(i) - 0.5f * float(SCREEN_WIDTH))/float(SCREEN_WIDTH) * obsRight;
+      Vec3Df stepY = (float(j) - 0.5f * float(SCREEN_HEIGHT))/float(SCREEN_HEIGHT) * obsUp;
+      Ray ray(obsPos, obsDir + stepX + stepY);
+
+      Vec3Df intersectionPoint;
+      Vec3Df intersectionNormal;
+      Vec3Df c(0.f, 0.f, 0.f);
+      if (object->intersect(ray, intersectionPoint, intersectionNormal)) {
+        BRDF::getColor(obsPos, intersectionPoint, intersectionNormal, object->getMaterial(), _scene.getLights(), c);
+      }
+      
+      _pixelGrid[i][j].r = c[0];
+      _pixelGrid[i][j].g = c[1];
+      _pixelGrid[i][j].b = c[2];
     }
   }
-  _state++;
   return _pixelGrid;
 }
 

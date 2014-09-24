@@ -3,17 +3,23 @@
 
 #include <vector>
 
-class Object3D;
+#include "Object3D.hpp"
+#include "Light.hpp"
 
 class Scene3D {
   public:
     Scene3D();
     ~Scene3D();
 
+  public:
+    void addObject(Object3D* object);
+    void addLight(Light light);
+    std::vector<const Object3D*> getObjects();
+    std::vector<Light> getLights();
 
   private:
     std::vector<Object3D*>      _objects;
-
+    std::vector<Light>          _lights;
 };
 
 #endif

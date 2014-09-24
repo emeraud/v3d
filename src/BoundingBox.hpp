@@ -36,6 +36,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include <vector>
 #include <algorithm>
+#include <cfloat>
 
 #include "Vec3D.h"
 
@@ -43,7 +44,7 @@ const float BOUNDINGBOX_EPSILON = 0.0001f;
 
 class BoundingBox {
 public:
-    BoundingBox () : minBb (Vec3Df (0.0f, 0.0f, 0.0f)), maxBb (Vec3Df (0.0f, 0.0f, 0.0f)) {}
+    BoundingBox () : minBb (Vec3Df (FLT_MAX, FLT_MAX, FLT_MAX)), maxBb (Vec3Df (-FLT_MAX, -FLT_MAX, -FLT_MAX)) {}
     BoundingBox (const Vec3Df & p) : minBb (p), maxBb (p) {}
     BoundingBox (const Vec3Df & min, const Vec3Df & max) : minBb (min), maxBb (max) {}
 
@@ -134,6 +135,15 @@ public:
         splitBoundingBoxArray[7] = BoundingBox (minBb + Vec3Df (x_2, y_2, z_2), med + Vec3Df (x_2, y_2, z_2));
     }
 
+    template<bool keepLower>
+    inline void subdivide (unsigned int i, float plan) {
+      if (keepLower) {
+        maxBb[i] = plan;
+      } else {
+        minBb[i] = plan;
+      }
+    }
+
 private:
     inline float getWHL (unsigned int i) const {
         return (maxBb[i] - minBb[i]);
@@ -150,9 +160,3 @@ private:
 
 #endif // BOUNDINGBOX_H
 
-// Some Emacs-Hints -- please don't remove:
-//
-//  Local Variables:
-//  mode:C++
-//  tab-width:4
-//  End:

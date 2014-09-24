@@ -6,14 +6,6 @@
 
 #include "Tessellation3D.hpp"
 
-Connector3D::Connector3D() {
-
-}
-
-Connector3D::~Connector3D() {
-
-}
-
 Tessellation3D* Connector3D::parseFile(const std::string& fileName) {
   std::ifstream file(fileName.c_str(), std::ios::binary);
   file.seekg(0, std::ios::end);
@@ -59,7 +51,7 @@ Tessellation3D* Connector3D::parseFile(const std::string& fileName) {
   // Parse it
   Tessellation3D* tessellation = new Tessellation3D();
 
-  int nbPoints, nbTriangles, nbLines;
+  unsigned int nbPoints, nbTriangles, nbLines;
   float x, y, z;
   unsigned int nbVertices;
   unsigned int v0, v1, v2;
@@ -70,20 +62,25 @@ Tessellation3D* Connector3D::parseFile(const std::string& fileName) {
     goto error;
   }
 
+  std::cout << "NbVertices: " << nbPoints << " nbTriangles: " << nbTriangles << std::endl;
+
+  // now vectors can be allocated with the right size
+  tessellation->resize(nbPoints, nbTriangles);
+
   // vertices
-  for (int i=0; i<nbPoints; i++) {
+  for (unsigned int i=0; i<nbPoints; i++) {
     if (!((s >> x) && (s >> y) && (s >> z))) {
       goto error;
     }
-    tessellation->addVertex(x, y, z);
+    tessellation->setVertex(i, x, y, z);
   }
 
   // triangles
-  for (int i=0; i<nbTriangles; i++) {
+  for (unsigned int i=0; i<nbTriangles; i++) {
     if (!((s >> nbVertices) && (nbVertices == 3) && (s >> v0) && (s >> v1) && (s >> v2))) {
       goto error;
     }
-    tessellation->addTriangle(v0, v1, v2);
+    tessellation->setTriangle(i, v0, v1, v2);
   }
 
   return tessellation;

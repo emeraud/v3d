@@ -29,7 +29,6 @@ class AnimationManager {
     Viewer*       _viewer;
     Pixel**       _pixelGrid;
     Scene3D       _scene;
-    int           _state;
     bool          _onMove;
     bool          _onExit;
 };
