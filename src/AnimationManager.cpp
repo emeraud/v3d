@@ -81,6 +81,9 @@ Pixel** AnimationManager::getNextImage() {
       if (object->intersect(ray, intersectionPoint, intersectionNormal)) {
         BRDF::getColor(obsPos, intersectionPoint, intersectionNormal, object->getMaterial(), _scene.getLights(), c);
       }
+      if (c[0] > 170 && c[1] > 170 && c[2] > 170) {
+        std::cout << "i=" << i << " j=" << j << " c=" << c << " pos=" << intersectionPoint << " norm=" << intersectionNormal << std::endl;
+      }
       
       _pixelGrid[i][j].r = c[0];
       _pixelGrid[i][j].g = c[1];

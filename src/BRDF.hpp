@@ -30,7 +30,7 @@ class BRDF
       reflectedPointToLight.normalize();
 
       c = (material.getDiffuse() * Vec3Df::dotProduct(pointToLight, objNormal)
-                  + material.getSpecular() * pow(Vec3Df::dotProduct(reflectedPointToLight, pointToViewer), 2))
+                  + material.getSpecular() * pow(Vec3Df::dotProduct(reflectedPointToLight, pointToViewer), 20))
               * material.getColor();
 
       c = 255 * c;

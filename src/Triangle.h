@@ -38,9 +38,3 @@ extern std::ostream & operator<< (std::ostream & output, const Triangle & t);
 
 #endif // TRIANGLE_H
 
-// Some Emacs-Hints -- please don't remove:
-//
-//  Local Variables:
-//  mode:C++
-//  tab-width:4
-//  End:

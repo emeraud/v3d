@@ -1,13 +1,15 @@
 CC=g++
 CFLAGS=-W -Wall -ansi -pedantic
-CXXFLAGS=-Wall
+CXXFLAGS=-Wall -g
 LDFLAGS=-lSDLmain -lSDL
 EXEC=v3d
 
 OBJDIR=build/
 SRCDIR=src/
 
-SRCTEMP=Hello.cpp Main.cpp
+SRCTEMP=Viewer.cpp Triangle.cpp Ray.cpp Tessellation3D.cpp \
+KDTree.cpp Object3D.cpp Connector3D.cpp Scene3D.cpp AnimationManager.cpp Main.cpp
+
 OBJTEMP=$(SRCTEMP:.cpp=.o)
 SRC=$(addprefix $(SRCDIR), $(SRCTEMP))
 OBJ=$(addprefix $(OBJDIR), $(OBJTEMP))
@@ -17,7 +19,24 @@ all: $(EXEC)
 $(EXEC): $(OBJ)
 	$(CC) -o $@ $^ $(LDFLAGS)
 
-$(OBJDIR)Main.o: $(SRCDIR)Hello.h
+$(SRCDIR)BRDF.h: $(SRCDIR)Material.hpp
+
+$(OBJDIR)Main.o: $(SRCDIR)Viewer.hpp $(SRCDIR)AnimationManager.hpp $(SRCDIR)Config.hpp
+
+$(OBJDIR)AnimationManager.o: $(SRCDIR)Viewer.hpp $(SRCDIR)Scene3D.hpp $(SRCDIR)Connector3D.hpp \
+$(SRCDIR)Tessellation3D.hpp $(SRCDIR)KDTree.hpp $(SRCDIR)Ray.hpp $(SRCDIR)BRDF.hpp
+
+$(OBJDIR)Scene3D.o: $(SRCDIR)Object3D.hpp
+
+$(OBJDIR)Tessellation3D.o: $(SRCDIR)Triangle.h
+
+$(OBJDIR)KDTree.o: $(SRCDIR)Tessellation3D.hpp $(SRCDIR)BoundingBox.hpp
+
+$(OBJDIR)Connector3D.o: $(SRCDIR)Tessellation3D.hpp
+
+$(OBJDIR)Object3D.o: $(SRCDIR)Tessellation3D.hpp $(SRCDIR)Material.hpp
+
+$(OBJDIR)Triangle.o: $(SRCDIR)Triangle.h
 
 $(OBJDIR)%.o: $(SRCDIR)%.cpp
 	$(CC) -o $@ -c $< $(CXXFLAGS)
@@ -28,5 +47,8 @@ clean:
 
 mrproper: clean
 	rm -rf $(EXEC)
+
+print_vars:
+	echo $(OBJ)
 
 .PHONY: clean mrproper all
