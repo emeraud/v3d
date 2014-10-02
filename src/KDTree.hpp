@@ -43,24 +43,25 @@ class Node {
   friend class KDTree;
 
   public:
-    Node(const std::vector<const Vertex*>& points, const BoundingBox& fatherBox, const int depth);
+    Node(const Tessellation3D* tessellation, const std::vector<const Triangle*>& triangles, const BoundingBox& fatherBox, const int depth);
     ~Node();
 
   public:
-    std::vector<const Vertex*> getVertices() const;
+    std::vector<const Triangle*> getTriangles() const;
 
   private:
     void getIntersectedChildren(const Ray& ray, std::vector<IntersectedNode>& nodes, const int depth) const;
 
   private:
-    void build(const std::vector<const Vertex*>& points, const int depth);
-    int getSplitDimension(const std::vector<const Vertex*>& points, const int depth);
+    void build(const Tessellation3D* tessellation, const std::vector<const Triangle*>& triangles, const int depth);
+    int getSplitDimension(const std::vector<const Triangle*>& triangles, const int depth);
 
   private:
-    Node*                        _lNode;
-    Node*                        _rNode;
-    std::vector<const Vertex*>   _points;
-    BoundingBox                  _bbox;
+    Node*                            _lNode;
+    Node*                            _rNode;
+    std::vector<const Triangle*>     _triangles;
+    BoundingBox                      _bbox;
 };
 
 #endif
+

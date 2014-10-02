@@ -11,14 +11,14 @@ class Ray {
   public:
     inline Ray () {}
     inline Ray (const Vec3Df & origin, const Vec3Df & direction)
-        : origin (origin), direction (direction) {}
+        : _origin (origin), _direction (direction) { _direction.normalize(); }
     inline virtual ~Ray () {}
 
   public:
-    inline const Vec3Df & getOrigin () const { return origin; }
-    inline Vec3Df & getOrigin () { return origin; }
-    inline const Vec3Df & getDirection () const { return direction; }
-    inline Vec3Df & getDirection () { return direction; }
+    inline const Vec3Df & getOrigin () const { return _origin; }
+    inline Vec3Df & getOrigin () { return _origin; }
+    inline const Vec3Df & getDirection () const { return _direction; }
+    inline Vec3Df & getDirection () { return _direction; }
 
   public:
     bool intersect (const BoundingBox & bbox, Vec3Df & intersectionPoint) const;
@@ -28,8 +28,8 @@ class Ray {
                     float &oT, float &oU, float &oV) const;
     
   private:
-    Vec3Df origin;
-    Vec3Df direction;
+    Vec3Df _origin;
+    Vec3Df _direction;
 };
 
 

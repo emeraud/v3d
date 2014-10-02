@@ -7,7 +7,6 @@
 
 #include "Viewer.hpp"
 #include "Connector3D.hpp" // FIXME temp
-#include "Tessellation3D.hpp"
 #include "KDTree.hpp"
 #include "Light.hpp"
 #include "BRDF.hpp"
@@ -25,7 +24,8 @@ AnimationManager::AnimationManager(Viewer* viewer) : _viewer(viewer), _onMove(tr
   }
 
   _scene.addLight(Light(Vec3Df(2.f, 2.f, 2.f), Vec3Df(1.f, 1.f, 1.f), 1.f));
-  _scene.addObject(new Object3D(Connector3D::parseFile("/home/val/Documents/dev/3d/raytracer/models/bunny.off")));
+  _scene.addObject(new Object3D(Connector3D::parseFile("/home/val/Documents/dev/3d/raytracer/models/ram.off")));
+  //_scene.addObject(new Object3D(Connector3D::parseFile("/home/val/Documents/dev/3d/raytracer/models/monkey.off")));
 }
 
 
@@ -63,11 +63,12 @@ void AnimationManager::run() {
 Pixel** AnimationManager::getNextImage() {
   // TODO add configurable observator position & light
   const Object3D* object = _scene.getObjects()[0];
-  Vec3Df obsPos(-2.f, 0.f, 0.f);
-  Vec3Df obsDir(1.0f, 0.f, 0.f);
+  Vec3Df obsPos(-4.f, 0.f, 0.f);
+  Vec3Df obsDir(1.f, 0.f, 0.f);
   Vec3Df obsRight(0.f, 1.f, 0.f);
   Vec3Df obsUp(0.f, 0.f, 1.f);
 
+  std::cout << "Begin raytracing" << std::endl;
   for (int i=0; i<SCREEN_WIDTH; i++) {
     for (int j=0; j<SCREEN_HEIGHT; j++) {
       // TODO FIXME: should be optimized (!) and configurable
@@ -81,15 +82,17 @@ Pixel** AnimationManager::getNextImage() {
       if (object->intersect(ray, intersectionPoint, intersectionNormal)) {
         BRDF::getColor(obsPos, intersectionPoint, intersectionNormal, object->getMaterial(), _scene.getLights(), c);
       }
-      if (c[0] > 170 && c[1] > 170 && c[2] > 170) {
-        std::cout << "i=" << i << " j=" << j << " c=" << c << " pos=" << intersectionPoint << " norm=" << intersectionNormal << std::endl;
-      }
       
       _pixelGrid[i][j].r = c[0];
       _pixelGrid[i][j].g = c[1];
       _pixelGrid[i][j].b = c[2];
     }
+    if (i%10 == 0) {
+      std::cout << "Line i=" << i << std::endl;
+    }
   }
+ 
+  std::cout << "End raytracing" << std::endl;
   return _pixelGrid;
 }
 
