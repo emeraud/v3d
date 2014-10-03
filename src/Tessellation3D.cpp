@@ -8,43 +8,39 @@ Tessellation3D::Tessellation3D() {
 
 Tessellation3D::~Tessellation3D() {
   std::cout << "Dtor, nb vertices=" << _vertices.size() << " nbTriangles=" << _triangles.size() << std::endl;
-  for (unsigned int i=0; i<_vertices.size(); i++) {
+  for (UInt i=0; i<_vertices.size(); i++) {
     delete _vertices[i];
   }
 }
 
-void Tessellation3D::resize(unsigned int nbVertices, unsigned int nbTriangles) {
+void Tessellation3D::resize(UInt nbVertices, UInt nbTriangles) {
   _vertices.resize(nbVertices, 0x0); 
   _triangles.resize(nbTriangles);
   std::cout << "Resize, nb vertices=" << _vertices.size() << " nbTriangles=" << _triangles.size() << std::endl;
 }
 
-const Vertex* Tessellation3D::getVertex(unsigned int idx) const {
+const Vertex* Tessellation3D::getVertex(UInt idx) const {
   return _vertices[idx];
 }
 
-const Triangle* Tessellation3D::getTriangle(unsigned int idx) const {
+const Triangle* Tessellation3D::getTriangle(UInt idx) const {
   return _triangles[idx];
 }
 
-TriangleVertices Tessellation3D::getTriangleVertices(unsigned int idx) const {
+TriangleVertices Tessellation3D::getTriangleVertices(UInt idx) const {
   Triangle* triangle = _triangles[idx];
-  return getTriangleVertices(triangle);
-}
-
-TriangleVertices Tessellation3D::getTriangleVertices(const Triangle* triangle) const {
   return TriangleVertices(_vertices[triangle->getVertex(0)],
                           _vertices[triangle->getVertex(1)],
                           _vertices[triangle->getVertex(2)]);
 }
 
-void Tessellation3D::setVertex(unsigned int idx, float x, float y, float z) {
+void Tessellation3D::setVertex(UInt idx, float x, float y, float z) {
   _vertices[idx] = new Vertex();
   _vertices[idx]->pos = Vec3Df(x, y, z);
   _vertices[idx]->normal = Vec3Df(0.f, 0.f, 0.f);
 }
 
-void Tessellation3D::setTriangle(unsigned int idx, unsigned int v0, unsigned int v1, unsigned int v2) {
+void Tessellation3D::setTriangle(UInt idx, UInt v0, UInt v1, UInt v2) {
   _triangles[idx] = new Triangle(v0, v1, v2);
   _vertices[v0]->triangles.push_back(idx);
   _vertices[v1]->triangles.push_back(idx);
@@ -55,19 +51,19 @@ std::vector<const Vertex*> Tessellation3D::getVerticesView() {
   std::vector<const Vertex*> verticesView;
   verticesView.resize(_vertices.size());
 
-  for (unsigned int i=0; i<_vertices.size(); ++i) {
+  for (UInt i=0; i<_vertices.size(); ++i) {
     verticesView[i] = _vertices[i];
   }
 
   return verticesView;
 }
 
-std::vector<const Triangle*> Tessellation3D::getTrianglesView() {
-  std::vector<const Triangle*> trianglesView;
+std::vector<UInt> Tessellation3D::getTrianglesView() {
+  std::vector<UInt> trianglesView;
   trianglesView.resize(_triangles.size());
 
-  for (unsigned int i=0; i<_triangles.size(); ++i) {
-    trianglesView[i] = _triangles[i];
+  for (UInt i=0; i<_triangles.size(); ++i) {
+    trianglesView[i] = i;
   }
 
   return trianglesView;
@@ -80,11 +76,11 @@ void Tessellation3D::computeVerticesNormals() {
   triangleNormals.resize(_triangles.size());
   triangleAreas.resize(_triangles.size());
 
-  unsigned int v0, v1, v2;
+  UInt v0, v1, v2;
   Vec3Df e0;
   Vec3Df e1;
 
-  for (unsigned int idx=0; idx<_triangles.size(); idx++) {
+  for (UInt idx=0; idx<_triangles.size(); idx++) {
     v0 = _triangles[idx]->getVertex(0);
     v1 = _triangles[idx]->getVertex(1);
     v2 = _triangles[idx]->getVertex(2);
@@ -98,9 +94,9 @@ void Tessellation3D::computeVerticesNormals() {
   }
 
   Vertex* vertex;
-  for (unsigned int i=0; i<_vertices.size(); i++) {
+  for (UInt i=0; i<_vertices.size(); i++) {
     vertex = _vertices[i];
-    for (unsigned int j=0; j<vertex->triangles.size(); j++) {
+    for (UInt j=0; j<vertex->triangles.size(); j++) {
       vertex->normal = vertex->normal + triangleAreas[vertex->triangles[j]] * triangleNormals[vertex->triangles[j]];
     }
     vertex->normal.normalize();

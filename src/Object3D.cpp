@@ -41,9 +41,9 @@ bool Object3D::intersect(const Ray& ray, Vec3Df& intersectionPoint, Vec3Df& inte
       break;
     }
 
-    std::vector<const Triangle*> triangles = nIt->node->getTriangles();
-    for (std::vector<const Triangle*>::const_iterator tIt = triangles.begin(); tIt != triangles.end(); ++tIt) {
-      TriangleVertices intersectedTriangle = _tessellation->getTriangleVertices(*tIt);
+    const std::vector<UInt>& triangles = nIt->node->getTriangles();
+    for (UInt i=0; i<triangles.size(); i++) {
+      TriangleVertices intersectedTriangle = _tessellation->getTriangleVertices(triangles[i]);
       if (ray.intersect(intersectedTriangle.v0->pos, intersectedTriangle.v1->pos, intersectedTriangle.v2->pos, t, u, v)) {
         if (t < minDist) {
           minDist = t;

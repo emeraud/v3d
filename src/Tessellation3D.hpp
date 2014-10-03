@@ -3,13 +3,14 @@
 
 #include <vector>
 
+#include "Types.hpp"
 #include "Triangle.h"
 #include "Vec3D.h"
 
 struct Vertex {
   Vec3Df                      pos;
   Vec3Df                      normal;
-  std::vector<unsigned int>   triangles;
+  std::vector<UInt>   triangles;
 };
 
 struct TriangleVertices {
@@ -27,17 +28,16 @@ class Tessellation3D {
     ~Tessellation3D();
 
   public:
-    void resize(unsigned int nbVertices, unsigned int nbTriangles);
-    const Vertex* getVertex(unsigned int idx) const;
-    const Triangle* getTriangle(unsigned int idx) const;
-    TriangleVertices getTriangleVertices(unsigned int idx) const;
-    TriangleVertices getTriangleVertices(const Triangle*) const; // TODO FIXME trash, only use indexes
-    void setVertex(unsigned int idx, float x, float y, float z);
-    void setTriangle(unsigned int idx, unsigned int v0, unsigned int v1, unsigned int v2);
+    void resize(UInt nbVertices, UInt nbTriangles);
+    const Vertex* getVertex(UInt idx) const;
+    const Triangle* getTriangle(UInt idx) const;
+    TriangleVertices getTriangleVertices(UInt idx) const;
+    void setVertex(UInt idx, float x, float y, float z);
+    void setTriangle(UInt idx, UInt v0, UInt v1, UInt v2);
     void computeVerticesNormals();
 
     std::vector<const Vertex*> getVerticesView(); 
-    std::vector<const Triangle*> getTrianglesView(); 
+    std::vector<UInt> getTrianglesView(); 
 
   private:
     std::vector<Triangle*>       _triangles;

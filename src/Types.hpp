@@ -9,4 +9,6 @@ struct Pixel {
   int b;
 };
 
+typedef unsigned int UInt;
+
 #endif

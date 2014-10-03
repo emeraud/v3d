@@ -43,23 +43,30 @@ class Node {
   friend class KDTree;
 
   public:
-    Node(const Tessellation3D* tessellation, const std::vector<const Triangle*>& triangles, const BoundingBox& fatherBox, const int depth);
+    Node(const Tessellation3D* tessellation, const std::vector<UInt>& triangles, const BoundingBox& fatherBox, const int depth);
     ~Node();
 
   public:
-    std::vector<const Triangle*> getTriangles() const;
+    const std::vector<UInt>& getTriangles() const;
 
   private:
     void getIntersectedChildren(const Ray& ray, std::vector<IntersectedNode>& nodes, const int depth) const;
 
   private:
-    void build(const Tessellation3D* tessellation, const std::vector<const Triangle*>& triangles, const int depth);
-    int getSplitDimension(const std::vector<const Triangle*>& triangles, const int depth);
+    void build(const Tessellation3D* tessellation, const std::vector<UInt>& triangles, const int depth);
+    bool splitTriangles(const Tessellation3D* tessellation, const std::vector<UInt>& triangles,
+                        UInt splitDimension, float median,
+                        std::vector<UInt>& lTriangles, std::vector<UInt>& rTriangles) const;
+    inline int getSplitDimension(const std::vector<UInt>& triangles, const int depth) const;
+    inline float computeMedian(const Tessellation3D* tessellation, const std::vector<UInt>& triangles, UInt splitDimension) const;
+
+  private:
+    void addAllTriangles(const std::vector<UInt>& triangles);
 
   private:
     Node*                            _lNode;
     Node*                            _rNode;
-    std::vector<const Triangle*>     _triangles;
+    std::vector<UInt>                _triangles;
     BoundingBox                      _bbox;
 };
 
