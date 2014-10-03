@@ -24,7 +24,8 @@ AnimationManager::AnimationManager(Viewer* viewer) : _viewer(viewer), _onMove(tr
   }
 
   _scene.addLight(Light(Vec3Df(2.f, 2.f, 2.f), Vec3Df(1.f, 1.f, 1.f), 1.f));
-  _scene.addObject(new Object3D(Connector3D::parseFile("/home/val/Documents/dev/3d/raytracer/models/ram.off")));
+  //_scene.addObject(new Object3D(Connector3D::parseFile("/home/val/Documents/dev/3d/raytracer/models/ram.off")));
+  _scene.addObject(new Object3D(Connector3D::parseFile("/home/val/Documents/dev/3d/raytracer/models/bunny.off")));
   //_scene.addObject(new Object3D(Connector3D::parseFile("/home/val/Documents/dev/3d/raytracer/models/monkey.off")));
 }
 
@@ -68,25 +69,45 @@ Pixel** AnimationManager::getNextImage() {
   Vec3Df obsRight(0.f, 1.f, 0.f);
   Vec3Df obsUp(0.f, 0.f, 1.f);
 
+  Vec3Df startX = -0.5f * obsRight;
+  Vec3Df startY = -0.5f * obsUp;
+
+  Vec3Df stepX = 1.f/float(SCREEN_WIDTH) * obsRight;
+  Vec3Df stepY = 1.f/float(SCREEN_HEIGHT) * obsUp;
+
+  Vec3Df currentX = startX;
+  Vec3Df currentY;
+  Vec3Df currentDir;
+
+  Vec3Df intersectionPoint;
+  Vec3Df intersectionNormal;
+  Vec3Df c(0.f, 0.f, 0.f);
+
   std::cout << "Begin raytracing" << std::endl;
   for (int i=0; i<SCREEN_WIDTH; i++) {
+    currentY = startY;
+    currentDir = obsDir + currentX;
     for (int j=0; j<SCREEN_HEIGHT; j++) {
-      // TODO FIXME: should be optimized (!) and configurable
+    /* we aim:
       Vec3Df stepX = (float(i) - 0.5f * float(SCREEN_WIDTH))/float(SCREEN_WIDTH) * obsRight;
       Vec3Df stepY = (float(j) - 0.5f * float(SCREEN_HEIGHT))/float(SCREEN_HEIGHT) * obsUp;
       Ray ray(obsPos, obsDir + stepX + stepY);
+    */
+      Ray ray(obsPos, currentDir + currentY);
 
-      Vec3Df intersectionPoint;
-      Vec3Df intersectionNormal;
-      Vec3Df c(0.f, 0.f, 0.f);
       if (object->intersect(ray, intersectionPoint, intersectionNormal)) {
         BRDF::getColor(obsPos, intersectionPoint, intersectionNormal, object->getMaterial(), _scene.getLights(), c);
+      } else {
+        c = Vec3Df(0.f, 0.f, 0.f);
       }
       
       _pixelGrid[i][j].r = c[0];
       _pixelGrid[i][j].g = c[1];
       _pixelGrid[i][j].b = c[2];
+
+      currentY = currentY + stepY;
     }
+    currentX = currentX + stepX;
     if (i%10 == 0) {
       std::cout << "Line i=" << i << std::endl;
     }
