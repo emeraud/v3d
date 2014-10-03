@@ -56,7 +56,6 @@ void Node::build(const Tessellation3D* tessellation, const std::vector<UInt>& tr
   std::vector<UInt> rTriangles;
 
   for (UInt k=0; k<3; k++) {
-    splitDimension = (splitDimension + k) % 3;
     median = computeMedian(tessellation, triangles, splitDimension);
 
     if (splitTriangles(tessellation, triangles, splitDimension, median, lTriangles, rTriangles)) {
@@ -65,6 +64,7 @@ void Node::build(const Tessellation3D* tessellation, const std::vector<UInt>& tr
     }
     lTriangles.clear();
     rTriangles.clear();
+    splitDimension = splitDimension == 2 ? 0 : splitDimension+1; // originalSplitDim + k % 3
   }
 
   if (!splitSuccess) {
