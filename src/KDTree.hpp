@@ -57,7 +57,7 @@ class Node {
     bool splitTriangles(const Tessellation3D* tessellation, const std::vector<UInt>& triangles,
                         UInt splitDimension, float median,
                         std::vector<UInt>& lTriangles, std::vector<UInt>& rTriangles) const;
-    inline int getSplitDimension(const std::vector<UInt>& triangles, const int depth) const;
+    inline UInt getSplitDimension(const std::vector<UInt>& triangles, const int depth) const;
     inline float computeMedian(const Tessellation3D* tessellation, const std::vector<UInt>& triangles, UInt splitDimension) const;
 
   private:

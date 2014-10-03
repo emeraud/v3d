@@ -49,15 +49,25 @@ void Node::build(const Tessellation3D* tessellation, const std::vector<UInt>& tr
   }
 
   // get the split dimension
-  int splitDimension = getSplitDimension(triangles, depth);
-
-  // compute the median
-  float median = computeMedian(tessellation, triangles, splitDimension);  
-
-  // vertices repartition
+  UInt splitDimension = getSplitDimension(triangles, depth);
+  bool splitSuccess = false;
+  float median;
   std::vector<UInt> lTriangles;
   std::vector<UInt> rTriangles;
-  if (!splitTriangles(tessellation, triangles, splitDimension, median, lTriangles, rTriangles)) {
+
+  for (UInt k=0; k<3; k++) {
+    splitDimension = (splitDimension + k) % 3;
+    median = computeMedian(tessellation, triangles, splitDimension);
+
+    if (splitTriangles(tessellation, triangles, splitDimension, median, lTriangles, rTriangles)) {
+      splitSuccess = true;
+      break;
+    }
+    lTriangles.clear();
+    rTriangles.clear();
+  }
+
+  if (!splitSuccess) {
     addAllTriangles(triangles); 
     return;
   }
@@ -74,8 +84,22 @@ void Node::build(const Tessellation3D* tessellation, const std::vector<UInt>& tr
   _rNode = new Node(tessellation, rTriangles, rBox, depth+1);
 }
 
-int Node::getSplitDimension(const std::vector<UInt>& triangles, const int depth) const {
-  return depth % 3; // FIXME largest bounding box dimension would be better
+UInt Node::getSplitDimension(const std::vector<UInt>& triangles, const int depth) const {
+  float dim[3] = { _bbox.getWidth(), _bbox.getHeight(), _bbox.getLength() };
+
+  if (dim[0] > dim[1]) {
+    if (dim[0] > dim[2]) {
+      return 0;
+    } else {
+      return 2;
+    }
+  } else {
+    if (dim[1] > dim[2]) {
+      return 1;
+    } else {
+      return 2;
+    }
+  }
 }
 
 bool Node::splitTriangles(const Tessellation3D* tessellation, const std::vector<UInt>& triangles,
@@ -83,6 +107,7 @@ bool Node::splitTriangles(const Tessellation3D* tessellation, const std::vector<
                           std::vector<UInt>& lTriangles, std::vector<UInt>& rTriangles) const {
   bool addToLeft, addToRight;
   const Triangle* triangle = 0x0;
+  UInt nbIntersections = 0;
   for (UInt i=0; i<triangles.size(); i++) {
     addToLeft = false;
     addToRight = false;
@@ -95,6 +120,10 @@ bool Node::splitTriangles(const Tessellation3D* tessellation, const std::vector<
       }
     }
 
+    if (addToLeft && addToRight) {
+      nbIntersections++;
+    }
+
     if (addToLeft) {
       lTriangles.push_back(triangles[i]);
     }
@@ -105,7 +134,8 @@ bool Node::splitTriangles(const Tessellation3D* tessellation, const std::vector<
 
   // if no selection has been performed, just register vertices and stop (TODO FIXME: switch direction instead)
   if (lTriangles.size() <= 2 || rTriangles.size() <= 2 ||
-        lTriangles.size() == triangles.size() || rTriangles.size() == triangles.size()) {
+        lTriangles.size() == triangles.size() || rTriangles.size() == triangles.size() ||
+        nbIntersections*2 > triangles.size()) {
     return false;
   }
   return true;
@@ -127,16 +157,6 @@ void Node::getIntersectedChildren(const Ray& ray, std::vector<IntersectedNode>& 
   }
 }
 
-const std::vector<UInt>& Node::getTriangles() const {
-  return _triangles;
-}
-
-void Node::addAllTriangles(const std::vector<UInt>& triangles) {
-  for (UInt i=0; i<triangles.size(); i++) {
-   _triangles.push_back(triangles[i]);
-  }
-}
-
 float Node::computeMedian(const Tessellation3D* tessellation, const std::vector<UInt>& triangles, UInt splitDimension) const {
   // median computation
   std::vector<float> v;
@@ -153,3 +173,14 @@ float Node::computeMedian(const Tessellation3D* tessellation, const std::vector<
   }
   return median;
 }
+
+const std::vector<UInt>& Node::getTriangles() const {
+  return _triangles;
+}
+
+void Node::addAllTriangles(const std::vector<UInt>& triangles) {
+  for (UInt i=0; i<triangles.size(); i++) {
+   _triangles.push_back(triangles[i]);
+  }
+}
+
