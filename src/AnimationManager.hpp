@@ -5,6 +5,7 @@
 
 #include "Types.hpp"
 #include "Scene3D.hpp"
+#include "Renderer.hpp"
 
 class Viewer;
 
@@ -27,7 +28,7 @@ class AnimationManager {
 
   private:
     Viewer*       _viewer;
-    Pixel**       _pixelGrid;
+    Renderer*     _renderer;
     Scene3D       _scene;
     bool          _onMove;
     bool          _onExit;

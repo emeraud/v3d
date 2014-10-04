@@ -1,14 +1,15 @@
 CC=g++
 CFLAGS=-W -Wall -ansi -pedantic
-CXXFLAGS=-Wall -g
-LDFLAGS=-lSDLmain -lSDL
+CXXFLAGS=-Wall -g -std=c++11
+LDFLAGS=-lSDLmain -lSDL -pthread
 EXEC=v3d
 
 OBJDIR=build/
 SRCDIR=src/
 
 SRCTEMP=Viewer.cpp Triangle.cpp Ray.cpp Tessellation3D.cpp \
-KDTree.cpp Object3D.cpp Connector3D.cpp Scene3D.cpp AnimationManager.cpp Main.cpp
+KDTree.cpp Object3D.cpp Connector3D.cpp Scene3D.cpp \
+Renderer.cpp AnimationManager.cpp Main.cpp
 
 OBJTEMP=$(SRCTEMP:.cpp=.o)
 SRC=$(addprefix $(SRCDIR), $(SRCTEMP))
@@ -23,8 +24,11 @@ $(SRCDIR)BRDF.h: $(SRCDIR)Material.hpp
 
 $(OBJDIR)Main.o: $(SRCDIR)Viewer.hpp $(SRCDIR)AnimationManager.hpp $(SRCDIR)Config.hpp
 
-$(OBJDIR)AnimationManager.o: $(SRCDIR)Viewer.hpp $(SRCDIR)Scene3D.hpp $(SRCDIR)Connector3D.hpp \
+$(OBJDIR)AnimationManager.o: $(SRCDIR)Viewer.hpp $(SRCDIR)Scene3D.hpp $(SRCDIR)Renderer.hpp $(SRCDIR)Connector3D.hpp \
 $(SRCDIR)Tessellation3D.hpp $(SRCDIR)KDTree.hpp $(SRCDIR)Ray.hpp $(SRCDIR)BRDF.hpp
+
+$(OBJDIR)Renderer.o: $(SRCDIR)Scene3D.hpp $(SRCDIR)Object3D.hpp \
+$(SRCDIR)Ray.hpp $(SRCDIR)BRDF.hpp
 
 $(OBJDIR)Scene3D.o: $(SRCDIR)Object3D.hpp
 
