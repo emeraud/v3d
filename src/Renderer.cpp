@@ -25,17 +25,14 @@ Renderer::~Renderer() {
   delete[] _pixelGrid;
 }
 
-void Renderer::setCamera(Vec3Df camPos, Vec3Df camDir, Vec3Df camRight, Vec3Df camUp) {
-  _camPos = camPos;
-  _camDir = camDir;
-  _camRight = camRight;
-  _camUp = camUp;
+void Renderer::setCamera(const Camera& camera) {
+  _camera = camera;
 
-  _startX = -0.5f * camRight;
-  _startY = -0.5f * camUp;
+  _startX = -0.5f * camera.right;
+  _startY = -0.5f * camera.up;
 
-  _stepX = 1.f/float(SCREEN_WIDTH) * camRight;
-  _stepY = 1.f/float(SCREEN_HEIGHT) * camUp;
+  _stepX = 1.f/float(SCREEN_WIDTH) * camera.right;
+  _stepY = 1.f/float(SCREEN_HEIGHT) * camera.up;
 }
 
 Pixel** Renderer::render() {
@@ -69,22 +66,20 @@ void Renderer::renderPixel(int x, int y) {
     Ray ray(obsPos, obsDir + stepX + stepY);
   */
 
-    Vec3Df intersectionPoint;
-    Vec3Df intersectionNormal;
-    Vec3Df c(0.f, 0.f, 0.f);
-    const Object3D* object = _scene->getObjects()[0];
-    Vec3Df xOffset = _startX + float(x) * _stepX;
+  Vec3Df intersectionPoint;
+  Vec3Df intersectionNormal;
+  Vec3Df c = _defaultColor;
+  const Object3D* object = _scene->getObjects()[0];
+  Vec3Df xOffset = _startX + float(x) * _stepX;
 
-    Vec3Df yOffset = _startY + float(y) * _stepY;
-    Ray ray(_camPos, _camDir + xOffset + yOffset);
+  Vec3Df yOffset = _startY + float(y) * _stepY;
+  Ray ray(_camera.pos, _camera.dir + xOffset + yOffset);
 
-    if (object->intersect(ray, intersectionPoint, intersectionNormal)) {
-      BRDF::getColor(_camPos, intersectionPoint, intersectionNormal, object->getMaterial(), _scene->getLights(), c);
-    } else {
-      c = Vec3Df(0.f, 0.f, 0.f);
-    }
-    
-    _pixelGrid[x][y].r = c[0];
-    _pixelGrid[x][y].g = c[1];
-    _pixelGrid[x][y].b = c[2];
+  if (object->intersect(ray, intersectionPoint, intersectionNormal)) {
+    BRDF::getColor(_camera.pos, intersectionPoint, intersectionNormal, object->getMaterial(), _scene->getLights(), c);
+  }
+  
+  _pixelGrid[x][y].r = c[0];
+  _pixelGrid[x][y].g = c[1];
+  _pixelGrid[x][y].b = c[2];
 }

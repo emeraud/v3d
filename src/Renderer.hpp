@@ -5,13 +5,22 @@
 #include "Types.hpp"
 #include "Vec3D.h"
 
+struct Camera {
+  Vec3Df   pos;
+  Vec3Df   dir;
+  Vec3Df   right;
+  Vec3Df   up;
+
+  Camera(Vec3Df _pos, Vec3Df _dir, Vec3Df _right, Vec3Df _up) : pos(_pos), dir(_dir), right(_right), up(_up) { }
+};
+
 class Renderer {
   public:
     Renderer(Scene3D* scene);
     ~Renderer();
 
   public:
-    void setCamera(Vec3Df camPos, Vec3Df camDir, Vec3Df camRight, Vec3Df camUp);
+    void setCamera(const Camera& camera);
     Pixel** render();
 
   private:
@@ -20,13 +29,9 @@ class Renderer {
 
   private:
     Scene3D*    _scene;
+    Camera      _camera;
     Pixel**     _pixelGrid;
     Vec3Df      _defaultColor;
-
-    Vec3Df      _camPos;
-    Vec3Df      _camDir;
-    Vec3Df      _camRight;
-    Vec3Df      _camUp;
 
   private:
     Vec3Df      _startX;

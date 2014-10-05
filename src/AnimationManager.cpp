@@ -28,27 +28,17 @@ AnimationManager::~AnimationManager() {
 }
 
 void AnimationManager::run() {
-  _viewer->update(getNextImage());
-  while (true) {
-    if (_onExit) {
-      break;
-    } else {
-      waitEvents();
-    }
-  }
-
-/*
   while (true) {
     if (_onExit) {
       break;
     } else if (_onMove) {
       _viewer->update(getNextImage());
+      _onMove = false; // for now, one image only
       treatEvents();
     } else {
       waitEvents();
     }
   }
-*/
 }
 
 Pixel** AnimationManager::getNextImage() {
@@ -57,7 +47,10 @@ Pixel** AnimationManager::getNextImage() {
   Vec3Df obsDir(1.f, 0.f, 0.f);
   Vec3Df obsRight(0.f, 1.f, 0.f);
   Vec3Df obsUp(0.f, 0.f, 1.f);
-  _renderer->setCamera(obsPos, obsDir, obsRight, obsUp);
+
+  Camera camera(obsPos, obsDir, obsRight, obsUp);
+
+  _renderer->setCamera(camera);
   return _renderer->render();
 }
 
