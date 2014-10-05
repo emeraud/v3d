@@ -42,14 +42,7 @@ void AnimationManager::run() {
 }
 
 Pixel** AnimationManager::getNextImage() {
-  // TODO add configurable observator position & light
-  Vec3Df obsPos(-2.f, 0.f, 0.f);
-  Vec3Df obsDir(1.f, 0.f, 0.f);
-  Vec3Df obsRight(0.f, 1.f, 0.f);
-  Vec3Df obsUp(0.f, 0.f, 1.f);
-
-  Camera camera(obsPos, obsDir, obsRight, obsUp);
-
+  Camera camera(Vec3Df(-2.f, 0.f, 0.f));
   _renderer->setCamera(camera);
   return _renderer->render();
 }
