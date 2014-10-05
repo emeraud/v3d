@@ -15,10 +15,6 @@ class BRDF
                            const Material material,
                            const std::vector<Light>& lights,
                            Vec3Df &c) {
-    c[0] = 0.f;
-    c[1] = 0.f;
-    c[2] = 0.f;
-
     Vec3Df pointToViewer = camPos - objPos;
     pointToViewer.normalize();
 

@@ -22,7 +22,10 @@ void Object3D::setMaterial(const Material& material) {
 }
 
 bool Object3D::intersect(const Ray& ray, Vec3Df& intersectionPoint, Vec3Df& intersectionNormal) const {
-  std::vector<IntersectedNode> nodes = _kdTree->getSortedIntersectedLeaves(ray);
+  std::vector<IntersectedNode> nodes;
+  if (!_kdTree->getSortedIntersectedLeaves(ray, nodes)) {
+    return false;
+  }
 
   // loop
   float t,u,v;
@@ -43,7 +46,7 @@ bool Object3D::intersect(const Ray& ray, Vec3Df& intersectionPoint, Vec3Df& inte
 
     const std::vector<UInt>& triangles = nIt->node->getTriangles();
     for (UInt i=0; i<triangles.size(); i++) {
-      TriangleVertices intersectedTriangle = _tessellation->getTriangleVertices(triangles[i]);
+      intersectedTriangle = _tessellation->getTriangleVertices(triangles[i]);
       if (ray.intersect(intersectedTriangle.v0->pos, intersectedTriangle.v1->pos, intersectedTriangle.v2->pos, t, u, v)) {
         if (t < minDist) {
           minDist = t;

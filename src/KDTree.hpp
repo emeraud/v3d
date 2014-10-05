@@ -28,7 +28,7 @@ class KDTree {
     ~KDTree();
 
   public:
-    std::vector<IntersectedNode> getSortedIntersectedLeaves(const Ray& ray) const;
+    bool getSortedIntersectedLeaves(const Ray& ray, std::vector<IntersectedNode>& nodes) const;
 
   private:
     void build();
@@ -56,9 +56,13 @@ class Node {
     void build(const Tessellation3D* tessellation, const std::vector<UInt>& triangles, const int depth);
     bool splitTriangles(const Tessellation3D* tessellation, const std::vector<UInt>& triangles,
                         UInt splitDimension, float median,
-                        std::vector<UInt>& lTriangles, std::vector<UInt>& rTriangles) const;
+                        std::vector<UInt>& lTriangles, std::vector<UInt>& rTriangles,
+                        UInt& nbIntersections) const;
     inline UInt getSplitDimension(const std::vector<UInt>& triangles, const int depth) const;
     inline float computeMedian(const Tessellation3D* tessellation, const std::vector<UInt>& triangles, UInt splitDimension) const;
+    template<bool isLeft>
+    BoundingBox computeChildBox(const Tessellation3D* tessellation, const std::vector<UInt>& triangles,
+                                  int splitDimension, float median, bool adaptBox);
 
   private:
     void addAllTriangles(const std::vector<UInt>& triangles);

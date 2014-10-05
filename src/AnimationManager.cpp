@@ -42,7 +42,7 @@ void AnimationManager::run() {
 }
 
 Pixel** AnimationManager::getNextImage() {
-  Camera camera(Vec3Df(-2.f, 0.f, 0.f));
+  Camera camera(Vec3Df(2.f, -2.f, 0.f));
   _renderer->setCamera(camera);
   return _renderer->render();
 }

@@ -23,11 +23,18 @@ void KDTree::build() {
   std::cout << "KDTree built" << std::endl;
 }
 
-std::vector<IntersectedNode> KDTree::getSortedIntersectedLeaves(const Ray& ray) const {
-  std::vector<IntersectedNode> nodes;
+bool KDTree::getSortedIntersectedLeaves(const Ray& ray, std::vector<IntersectedNode>& nodes) const {
   _root->getIntersectedChildren(ray, nodes, 0);
+  if (nodes.size() == 0) {
+    return false;
+  }
+  /*
+  if (nodes.size() > 0) {
+    std::cout << "Nb Intersected Node: " << nodes.size() << std::endl;
+  }
+  */
   std::sort(nodes.begin(), nodes.end(), IntersectedNodeSorter());
-  return nodes;
+  return true;
 }
 
 // Node
@@ -43,7 +50,7 @@ Node::~Node() {
 }
 
 void Node::build(const Tessellation3D* tessellation, const std::vector<UInt>& triangles, const int depth) {
-  if (triangles.size() <= 4 || depth > 15) { // TODO find a smarter stop condition and expose params
+  if (triangles.size() <= 4 || depth > 30) { // TODO find a smarter stop condition and expose params
     addAllTriangles(triangles);
     return;
   }
@@ -54,11 +61,12 @@ void Node::build(const Tessellation3D* tessellation, const std::vector<UInt>& tr
   float median;
   std::vector<UInt> lTriangles;
   std::vector<UInt> rTriangles;
+  UInt nbIntersections = 0;
 
   for (UInt k=0; k<3; k++) {
     median = computeMedian(tessellation, triangles, splitDimension);
 
-    if (splitTriangles(tessellation, triangles, splitDimension, median, lTriangles, rTriangles)) {
+    if (splitTriangles(tessellation, triangles, splitDimension, median, lTriangles, rTriangles, nbIntersections)) {
       splitSuccess = true;
       break;
     }
@@ -73,14 +81,13 @@ void Node::build(const Tessellation3D* tessellation, const std::vector<UInt>& tr
   }
 
   // left child node
-  BoundingBox lBox = _bbox;
-  lBox.subdivide<true>(splitDimension, median);
+  bool adaptBox = (nbIntersections == 0);
+  BoundingBox lBox = computeChildBox<true>(tessellation, lTriangles, splitDimension, median, adaptBox);
   _lNode = new Node(tessellation, lTriangles, lBox, depth+1);
   lTriangles.resize(0);
 
   // right child node
-  BoundingBox rBox = _bbox;
-  rBox.subdivide<false>(splitDimension, median);
+  BoundingBox rBox = computeChildBox<false>(tessellation, lTriangles, splitDimension, median, adaptBox);
   _rNode = new Node(tessellation, rTriangles, rBox, depth+1);
 }
 
@@ -104,10 +111,10 @@ UInt Node::getSplitDimension(const std::vector<UInt>& triangles, const int depth
 
 bool Node::splitTriangles(const Tessellation3D* tessellation, const std::vector<UInt>& triangles,
                           UInt splitDimension, float median,
-                          std::vector<UInt>& lTriangles, std::vector<UInt>& rTriangles) const {
+                          std::vector<UInt>& lTriangles, std::vector<UInt>& rTriangles, UInt &nbIntersections) const {
   bool addToLeft, addToRight;
   const Triangle* triangle = 0x0;
-  UInt nbIntersections = 0;
+  nbIntersections = 0;
   for (UInt i=0; i<triangles.size(); i++) {
     addToLeft = false;
     addToRight = false;
@@ -138,7 +145,26 @@ bool Node::splitTriangles(const Tessellation3D* tessellation, const std::vector<
         nbIntersections*2 > triangles.size()) {
     return false;
   }
+
   return true;
+}
+
+template<bool isLeft>
+BoundingBox Node::computeChildBox(const Tessellation3D* tessellation, const std::vector<UInt>& triangles,
+                                  int splitDimension, float median, bool adaptBox) {
+  BoundingBox box;
+  if (!adaptBox) {
+    box = _bbox;
+    box.subdivide<isLeft>(splitDimension, median);
+  } else {
+    for (UInt i=0; i<triangles.size(); i++) {
+      TriangleVertices triangleVertices = tessellation->getTriangleVertices(triangles[i]);
+      box.extendTo(triangleVertices.v0->pos);
+      box.extendTo(triangleVertices.v1->pos);
+      box.extendTo(triangleVertices.v2->pos);
+    }
+  }
+  return box;
 }
 
 void Node::getIntersectedChildren(const Ray& ray, std::vector<IntersectedNode>& nodes, const int depth) const {
