@@ -6,7 +6,7 @@
 #include "Object3D.hpp"
 #include "BRDF.hpp"
 
-Renderer::Renderer(Scene3D* scene) : _scene(scene) {
+Renderer::Renderer(Scene3D* scene, Camera* camera) : _scene(scene), _camera(camera) {
   _pixelGrid = new Pixel*[SCREEN_WIDTH];
   for (int i=0; i<SCREEN_WIDTH; i++) {
     _pixelGrid[i] = new Pixel[SCREEN_HEIGHT];
@@ -25,26 +25,34 @@ Renderer::~Renderer() {
   delete[] _pixelGrid;
 }
 
-void Renderer::setCamera(const Camera& camera) {
-  _camera = camera;
+void Renderer::computeConstants() {
+  _startX = -0.5f * _camera->right;
+  _startY = -0.5f * _camera->up;
 
-  _startX = -0.5f * camera.right;
-  _startY = -0.5f * camera.up;
+  _stepX = 1.f/float(SCREEN_WIDTH) * _camera->right;
+  _stepY = 1.f/float(SCREEN_HEIGHT) * _camera->up;
 
-  _stepX = 1.f/float(SCREEN_WIDTH) * camera.right;
-  _stepY = 1.f/float(SCREEN_HEIGHT) * camera.up;
 }
 
 Pixel** Renderer::render() {
   std::cout << "Begin raytracing" << std::endl;
-  std::thread threads[4];
-  for (int k=0; k<160; k++) {
-    for (int i=0; i<4; i++) {
-      threads[i] = std::thread(&Renderer::renderLine, this, 4*k + i);
+  computeConstants();
+  std::thread threads[NB_THREADS];
+  int nbBlocks = SCREEN_WIDTH / NB_THREADS;
+  int currentLine = 0;
+
+  for (int k=0; k<nbBlocks; k++) {
+    for (int i=0; i<NB_THREADS; i++) {
+      if (currentLine < SCREEN_WIDTH) {
+        threads[i] = std::thread(&Renderer::renderLine, this, currentLine);
+        currentLine++;
+      }
     }
 
-    for (int i=0; i<4; i++) {
-      threads[i].join();
+    for (int i=0; i<NB_THREADS; i++) {
+      if (currentLine - (NB_THREADS - i) < SCREEN_WIDTH) {
+        threads[i].join();
+      }
     }
   }
 
@@ -73,10 +81,10 @@ void Renderer::renderPixel(int x, int y) {
   Vec3Df xOffset = _startX + float(x) * _stepX;
 
   Vec3Df yOffset = _startY + float(y) * _stepY;
-  Ray ray(_camera.pos, _camera.dir + xOffset + yOffset);
+  Ray ray(_camera->pos, _camera->dir + xOffset + yOffset);
 
   if (object->intersect(ray, intersectionPoint, intersectionNormal)) {
-    BRDF::getColor(_camera.pos, intersectionPoint, intersectionNormal, object->getMaterial(), _scene->getLights(), c);
+    BRDF::getColor(_camera->pos, intersectionPoint, intersectionNormal, object->getMaterial(), _scene->getLights(), c);
   }
   
   _pixelGrid[x][y].r = c[0];

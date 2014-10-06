@@ -18,6 +18,7 @@ class AnimationManager {
     void run();
 
   private:
+    void move();
     Pixel** getNextImage();
 
     void treatEvents();
@@ -28,6 +29,7 @@ class AnimationManager {
 
   private:
     Viewer*       _viewer;
+    Camera        _camera;
     Renderer*     _renderer;
     Scene3D       _scene;
     bool          _onMove;

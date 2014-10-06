@@ -18,8 +18,10 @@ AnimationManager::AnimationManager(Viewer* viewer) : _viewer(viewer), _onMove(tr
   //_scene.addObject(new Object3D(Connector3D::parseFile("/home/val/Documents/dev/3d/raytracer/models/ram.off")));
   _scene.addObject(new Object3D(Connector3D::parseFile("/home/val/Documents/dev/3d/raytracer/models/bunny.off")));
   //_scene.addObject(new Object3D(Connector3D::parseFile("/home/val/Documents/dev/3d/raytracer/models/monkey.off")));
+  //_scene.addObject(new Object3D(Connector3D::parseFile("/home/val/Documents/dev/3d/raytracer/models/Ramesses.off")));
 
-  _renderer = new Renderer(&_scene);
+  _camera = Camera(Vec3Df(3.f, -3.f, 0.f));
+  _renderer = new Renderer(&_scene, &_camera);
 }
 
 
@@ -33,7 +35,6 @@ void AnimationManager::run() {
       break;
     } else if (_onMove) {
       _viewer->update(getNextImage());
-      _onMove = false; // for now, one image only
       treatEvents();
     } else {
       waitEvents();
@@ -41,9 +42,16 @@ void AnimationManager::run() {
   }
 }
 
+void AnimationManager::move() {
+  Vec3Df rotationAxis = Vec3Df(0.f, 1.f, 0.f);
+  Vec3Df movement = Vec3Df::crossProduct(_camera.pos, rotationAxis);
+  movement.normalize();
+  movement = 0.2f * movement;
+  _camera.updatePos(_camera.pos + movement);
+}
+
 Pixel** AnimationManager::getNextImage() {
-  Camera camera(Vec3Df(2.f, -2.f, 0.f));
-  _renderer->setCamera(camera);
+  move();
   return _renderer->render();
 }
 

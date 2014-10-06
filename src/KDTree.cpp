@@ -28,11 +28,7 @@ bool KDTree::getSortedIntersectedLeaves(const Ray& ray, std::vector<IntersectedN
   if (nodes.size() == 0) {
     return false;
   }
-  /*
-  if (nodes.size() > 0) {
-    std::cout << "Nb Intersected Node: " << nodes.size() << std::endl;
-  }
-  */
+  
   std::sort(nodes.begin(), nodes.end(), IntersectedNodeSorter());
   return true;
 }

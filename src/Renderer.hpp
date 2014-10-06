@@ -11,15 +11,24 @@ struct Camera {
   Vec3Df   up;
   Vec3Df   right;
 
-  Camera() { }
-  Camera(Vec3Df _pos) : pos(_pos) {
-    dir = - pos;
-    dir.getTwoOrthogonals(up, right);
-    normalize();
-  }
-  Camera(Vec3Df _pos, Vec3Df _dir, Vec3Df _up, Vec3Df _right) : pos(_pos), dir(_dir), up(_up), right(_right) {
-    normalize();
-  }
+  public:
+    Camera() { }
+
+    Camera(Vec3Df _pos) {
+      updatePos(_pos);
+    }
+
+    Camera(Vec3Df _pos, Vec3Df _dir, Vec3Df _up, Vec3Df _right) : pos(_pos), dir(_dir), up(_up), right(_right) {
+      normalize();
+    }
+
+  public:
+    void updatePos(Vec3Df _pos) {
+      pos = _pos;
+      dir = - pos;
+      dir.getTwoOrthogonals(up, right);
+      normalize();
+    }
 
   private:
     void normalize() {
@@ -31,20 +40,20 @@ struct Camera {
 
 class Renderer {
   public:
-    Renderer(Scene3D* scene);
+    Renderer(Scene3D* scene, Camera* camera);
     ~Renderer();
 
   public:
-    void setCamera(const Camera& camera);
     Pixel** render();
 
   private:
+    void computeConstants();
     void renderLine(int x);
     void renderPixel(int x, int y);
 
   private:
     Scene3D*    _scene;
-    Camera      _camera;
+    Camera*     _camera;
     Pixel**     _pixelGrid;
     Vec3Df      _defaultColor;
 

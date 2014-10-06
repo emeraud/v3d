@@ -28,7 +28,7 @@ $(OBJDIR)AnimationManager.o: $(SRCDIR)Viewer.hpp $(SRCDIR)Scene3D.hpp $(SRCDIR)R
 $(SRCDIR)Tessellation3D.hpp $(SRCDIR)KDTree.hpp $(SRCDIR)Ray.hpp $(SRCDIR)BRDF.hpp
 
 $(OBJDIR)Renderer.o: $(SRCDIR)Scene3D.hpp $(SRCDIR)Object3D.hpp \
-$(SRCDIR)Ray.hpp $(SRCDIR)BRDF.hpp
+$(SRCDIR)Ray.hpp $(SRCDIR)BRDF.hpp $(SRCDIR)Config.hpp
 
 $(OBJDIR)Scene3D.o: $(SRCDIR)Object3D.hpp
 
