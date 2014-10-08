@@ -1,6 +1,6 @@
 CC=g++
 CFLAGS=-W -Wall -ansi -pedantic
-CXXFLAGS=-Wall -g -std=c++11
+CXXFLAGS=-Wall -g -std=c++11 -O2
 LDFLAGS=-lSDLmain -lSDL -pthread
 EXEC=v3d
 
