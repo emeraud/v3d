@@ -58,6 +58,39 @@ bool Ray::intersect(const BoundingBox & bbox, Vec3Df & intersectionPoint) const 
   return (true);			
 }
 
+# define MIN(a,b) (a < b ? a : b)
+# define MAX(a,b) (a > b ? a : b)
+
+bool Ray::intersect(const BoundingBox& bbox) const {
+  const Vec3Df & minBb = bbox.getMin ();
+  const Vec3Df & maxBb = bbox.getMax ();
+
+  float tx1 = (minBb[0] - _origin[0])*_invDirection[0];
+  float tx2 = (maxBb[0] - _origin[0])*_invDirection[0];
+
+  float tmin = MIN(tx1, tx2);
+  float tmax = MAX(tx1, tx2);
+
+  float ty1 = (minBb[1] - _origin[1])*_invDirection[1];
+  float ty2 = (maxBb[1] - _origin[1])*_invDirection[1];
+
+  tmin = MAX(tmin, MIN(ty1, ty2));
+  tmax = MIN(tmax, MAX(ty1, ty2));
+
+  float tz1 = (minBb[2] - _origin[2])*_invDirection[2];
+  float tz2 = (maxBb[2] - _origin[2])*_invDirection[2];
+
+  tmin = MAX(tmin, MIN(tz1, tz2));
+  tmax = MIN(tmax, MAX(tz1, tz2));
+
+  /*
+  float t = FLT_MAX;
+  return tmax >= MAX(0.f, tmin) && tmin < t;
+  */
+
+  return tmax >= MAX(0.f, tmin);
+}
+
 bool Ray::intersect(const Vec3Df v0, const Vec3Df v1, const Vec3Df v2,
                      float &oT, float &oU, float &oV) const {
 

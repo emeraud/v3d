@@ -35,7 +35,6 @@ void Renderer::computeConstants() {
 }
 
 Pixel** Renderer::render() {
-  std::cout << "Begin raytracing" << std::endl;
   computeConstants();
   std::thread threads[NB_THREADS];
   int nbBlocks = SCREEN_WIDTH / NB_THREADS;
@@ -55,8 +54,6 @@ Pixel** Renderer::render() {
       }
     }
   }
-
-  std::cout << "End raytracing" << std::endl;
 
   return _pixelGrid;
 }

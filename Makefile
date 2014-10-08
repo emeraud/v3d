@@ -22,10 +22,10 @@ $(EXEC): $(OBJ)
 
 $(SRCDIR)BRDF.h: $(SRCDIR)Material.hpp
 
-$(OBJDIR)Main.o: $(SRCDIR)Viewer.hpp $(SRCDIR)AnimationManager.hpp $(SRCDIR)Config.hpp
+$(OBJDIR)Main.o: $(SRCDIR)Viewer.hpp $(SRCDIR)AnimationManager.hpp $(SRCDIR)Scene3D.hpp \
+$(SRCDIR)Renderer.hpp $(SRCDIR)Connector3D.hpp $(SRCDIR)Vec3D.h
 
-$(OBJDIR)AnimationManager.o: $(SRCDIR)Viewer.hpp $(SRCDIR)Scene3D.hpp $(SRCDIR)Renderer.hpp $(SRCDIR)Connector3D.hpp \
-$(SRCDIR)Tessellation3D.hpp $(SRCDIR)KDTree.hpp $(SRCDIR)Ray.hpp $(SRCDIR)BRDF.hpp
+$(OBJDIR)AnimationManager.o: $(SRCDIR)Viewer.hpp $(SRCDIR)Renderer.hpp $(SRCDIR)Scene3D.hpp
 
 $(OBJDIR)Renderer.o: $(SRCDIR)Scene3D.hpp $(SRCDIR)Object3D.hpp \
 $(SRCDIR)Ray.hpp $(SRCDIR)BRDF.hpp $(SRCDIR)Config.hpp

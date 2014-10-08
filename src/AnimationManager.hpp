@@ -16,6 +16,8 @@ class AnimationManager {
 
   public:
     void run();
+    Scene3D& getScene();
+    void setNbFrames(UInt nbFrames);
 
   private:
     void move();
@@ -34,6 +36,7 @@ class AnimationManager {
     Scene3D       _scene;
     bool          _onMove;
     bool          _onExit;
+    UInt          _nbFrames;
 };
 
 #endif

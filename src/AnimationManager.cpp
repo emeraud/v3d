@@ -3,25 +3,15 @@
 #include "SDL/SDL.h"
 
 #include <iostream>
-#include <vector>
-#include <thread>
+#include <climits>
 
 #include "Viewer.hpp"
-#include "Connector3D.hpp" // FIXME temp
-#include "KDTree.hpp"
-#include "Light.hpp"
-#include "BRDF.hpp"
 
 
 AnimationManager::AnimationManager(Viewer* viewer) : _viewer(viewer), _onMove(true), _onExit(false) {
-  _scene.addLight(Light(Vec3Df(2.f, 2.f, 2.f), Vec3Df(1.f, 1.f, 1.f), 1.f));
-  //_scene.addObject(new Object3D(Connector3D::parseFile("/home/val/Documents/dev/3d/raytracer/models/ram.off")));
-  _scene.addObject(new Object3D(Connector3D::parseFile("/home/val/Documents/dev/3d/raytracer/models/bunny.off")));
-  //_scene.addObject(new Object3D(Connector3D::parseFile("/home/val/Documents/dev/3d/raytracer/models/monkey.off")));
-  //_scene.addObject(new Object3D(Connector3D::parseFile("/home/val/Documents/dev/3d/raytracer/models/Ramesses.off")));
-
   _camera = Camera(Vec3Df(3.f, -3.f, 0.f));
   _renderer = new Renderer(&_scene, &_camera);
+  _nbFrames = UINT_MAX;
 }
 
 
@@ -42,15 +32,27 @@ void AnimationManager::run() {
   }
 }
 
+Scene3D& AnimationManager::getScene() {
+  return _scene;
+}
+void AnimationManager::setNbFrames(UInt nbFrames) {
+  _nbFrames = nbFrames;
+}
+
 void AnimationManager::move() {
   Vec3Df rotationAxis = Vec3Df(0.f, 1.f, 0.f);
   Vec3Df movement = Vec3Df::crossProduct(_camera.pos, rotationAxis);
   movement.normalize();
   movement = 0.2f * movement;
   _camera.updatePos(_camera.pos + movement);
+  _nbFrames--;
+  if (_nbFrames == 0) {
+    _onExit = true;
+  }
 }
 
 Pixel** AnimationManager::getNextImage() {
+  std::cout << "Remaining frames to display: " << _nbFrames << std::endl;
   move();
   return _renderer->render();
 }

@@ -7,7 +7,6 @@ Tessellation3D::Tessellation3D() {
 }
 
 Tessellation3D::~Tessellation3D() {
-  std::cout << "Dtor, nb vertices=" << _vertices.size() << " nbTriangles=" << _triangles.size() << std::endl;
   for (UInt i=0; i<_vertices.size(); i++) {
     delete _vertices[i];
   }
@@ -16,7 +15,6 @@ Tessellation3D::~Tessellation3D() {
 void Tessellation3D::resize(UInt nbVertices, UInt nbTriangles) {
   _vertices.resize(nbVertices, 0x0); 
   _triangles.resize(nbTriangles);
-  std::cout << "Resize, nb vertices=" << _vertices.size() << " nbTriangles=" << _triangles.size() << std::endl;
 }
 
 const Vertex* Tessellation3D::getVertex(UInt idx) const {

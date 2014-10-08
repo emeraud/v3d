@@ -290,7 +290,7 @@ public:
                       n[0]*q[0] + n[1]*q[1] + n[2]*q[2]);
     }
 
-protected:
+public:
     T p[3];
 };
 

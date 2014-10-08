@@ -165,9 +165,11 @@ BoundingBox Node::computeChildBox(const Tessellation3D* tessellation, const std:
 
 void Node::getIntersectedChildren(const Ray& ray, std::vector<IntersectedNode>& nodes, const int depth) const {
   Vec3Df intersectionPoint;
-  if (ray.intersect(_bbox, intersectionPoint)) {
+  if (ray.intersect(_bbox)) {
     if (_triangles.size() > 0) {
-      nodes.push_back(IntersectedNode(this, Vec3Df::squaredDistance(ray.getOrigin(), intersectionPoint)));
+      if (ray.intersect(_bbox, intersectionPoint)) {
+        nodes.push_back(IntersectedNode(this, Vec3Df::squaredDistance(ray.getOrigin(), intersectionPoint)));
+      }
     } else {
       if (_lNode != 0x0) {
         _lNode->getIntersectedChildren(ray, nodes, depth+1);
