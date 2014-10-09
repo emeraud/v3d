@@ -1,5 +1,7 @@
 #include <iostream>
 #include <chrono>
+#include <string>
+#include <map>
 
 #include <SDL/SDL.h>
 
@@ -11,90 +13,39 @@
 #include "Light.hpp"
 #include "Vec3D.h"
 
-void classicDisplay();
-void configure_classic(AnimationManager&);
-void bench();
-void playBench(AnimationManager&);
-void configure_bench1(AnimationManager&);
-void configure_bench2(AnimationManager&);
-void configure_bench3(AnimationManager&);
+#include "PreconfiguredScene.hpp"
 
-int main(int argc, char *argv[])
-{
-  // print args
-  for (int i=0; i<argc; i++) {
-    std::cout << argv[i] << std::endl;
-  }
+int main(int argc, char *argv[]) {
+  // TODO FIXME check memory leak for objects in map
 
-  if (argc <= 1) {
-    classicDisplay();
+  std::map<std::string,PreconfiguredScene*> availableScenes; 
+  availableScenes["Ram_5Frames"] = new Scene_Ram_5Frames(); 
+  availableScenes["Bunny_3Frames"] = new Scene_Bunny_3Frames(); 
+  availableScenes["Monkey_4Frames"] = new Scene_Monkey_4Frames(); 
+
+  if (argc == 3) {
+    if (std::string(argv[1]).compare("play") == 0) {
+      if (availableScenes.count(std::string(argv[2])) == 1) {
+        availableScenes[std::string(argv[2])]->play();
+      } else {
+        std::cout << "Scene: '" << argv[2] << "' not found" << std::endl;
+      }
+    } else {
+      std::cout << "Command: '" << argv[1] << "' not recognized" << std::endl;
+    }
+  } else if (argc == 2) {
+    if (std::string(argv[1]).compare("bench") == 0) {
+      for(std::map<std::string,PreconfiguredScene*>::const_iterator it = availableScenes.begin(); it!=availableScenes.end(); ++it) {
+        std::cout << "Playing scene '" << it->first << "'" << std::endl;
+        it->second->play();
+      }
+    } else {
+      std::cout << "Command: '" << argv[1] << "' not recognized" << std::endl;
+    }
   } else {
-    bench();
+    availableScenes["Ram_5Frames"]->play(); 
   }
 
   return EXIT_SUCCESS;
-}
-
-void classicDisplay() {
-  // let's move it on
-  Viewer viewer;
-  AnimationManager animationManager(&viewer);
-  configure_classic(animationManager);
-  animationManager.run();
-}
-
-void configure_classic(AnimationManager &animationManager) {
-  animationManager.getScene().addLight(Light(Vec3Df(2.f, 2.f, 2.f), Vec3Df(1.f, 1.f, 1.f), 1.f));
-  animationManager.getScene().addObject(new Object3D(Connector3D::parseFile("/home/val/Documents/dev/3d/raytracer/models/ram.off")));
-}
-
-void bench() {
-  {
-    Viewer viewer;
-    AnimationManager animationManager(&viewer);
-    configure_bench1(animationManager);
-    playBench(animationManager);
-  }
-
-  {
-    Viewer viewer;
-    AnimationManager animationManager(&viewer);
-    configure_bench2(animationManager);
-    playBench(animationManager);
-  }
-
-  {
-    Viewer viewer;
-    AnimationManager animationManager(&viewer);
-    configure_bench3(animationManager);
-    playBench(animationManager);
-  }
-}
-
-void playBench(AnimationManager& animationManager) {
-  std::cout << "Now running" << std::endl;
-  auto start = std::chrono::system_clock::now();
-  animationManager.run();
-  auto end = std::chrono::system_clock::now();
-  auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
-  std::cout << elapsed.count() << " ms" << std::endl;
-}
-
-void configure_bench1(AnimationManager &animationManager) {
-  animationManager.getScene().addLight(Light(Vec3Df(2.f, 2.f, 2.f), Vec3Df(1.f, 1.f, 1.f), 1.f));
-  animationManager.getScene().addObject(new Object3D(Connector3D::parseFile("/home/val/Documents/dev/3d/raytracer/models/ram.off")));
-  animationManager.setNbFrames(5);
-}
-
-void configure_bench2(AnimationManager &animationManager) {
-  animationManager.getScene().addLight(Light(Vec3Df(2.f, 2.f, 2.f), Vec3Df(1.f, 1.f, 1.f), 1.f));
-  animationManager.getScene().addObject(new Object3D(Connector3D::parseFile("/home/val/Documents/dev/3d/raytracer/models/bunny.off")));
-  animationManager.setNbFrames(3);
-}
-
-void configure_bench3(AnimationManager &animationManager) {
-  animationManager.getScene().addLight(Light(Vec3Df(2.f, 2.f, 2.f), Vec3Df(1.f, 1.f, 1.f), 1.f));
-  animationManager.getScene().addObject(new Object3D(Connector3D::parseFile("/home/val/Documents/dev/3d/raytracer/models/monkey.off")));
-  animationManager.setNbFrames(4);
 }
 

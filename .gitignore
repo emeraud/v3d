@@ -1,4 +1,5 @@
 *.swp
 build/
 biblio/
+profiling/
 v3d

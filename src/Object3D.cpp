@@ -33,7 +33,7 @@ bool Object3D::intersect(const Ray& ray, Vec3Df& intersectionPoint, Vec3Df& inte
 
   // best so far
   TriangleVertices bestTriangle;
-  float uI, vI;
+  float uI = 0.f, vI = 0.f;
   float minDist = FLT_MAX;
   float sqMinDist = FLT_MAX;
 
