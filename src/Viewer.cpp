@@ -7,7 +7,7 @@ Viewer::Viewer() {
   // sdl initialization
   SDL_Init(SDL_INIT_VIDEO);
   SDL_WM_SetCaption("SDL Init", NULL);
-  _screen = SDL_SetVideoMode(SCREEN_WIDTH, SCREEN_HEIGHT, 32, SDL_HWSURFACE);
+  _screen = SDL_SetVideoMode(SCREEN_WIDTH, SCREEN_HEIGHT, 32, SDL_HWSURFACE); // freed by SDL_QUIT
 
   // pixels allocation
   for (int i=0; i<SCREEN_WIDTH; i++) {
@@ -24,9 +24,6 @@ Viewer::~Viewer() {
       SDL_FreeSurface(_pixels[i][j]);
     }
   }
-
-  // release screen
-  SDL_FreeSurface(_screen); 
 
   // quit sdl
   SDL_Quit();

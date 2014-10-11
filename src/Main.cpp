@@ -16,8 +16,6 @@
 #include "PreconfiguredScene.hpp"
 
 int main(int argc, char *argv[]) {
-  // TODO FIXME check memory leak for objects in map
-
   std::map<std::string,PreconfiguredScene*> availableScenes; 
   availableScenes["Ram_5Frames"] = new Scene_Ram_5Frames(); 
   availableScenes["Bunny_3Frames"] = new Scene_Bunny_3Frames(); 
@@ -44,6 +42,11 @@ int main(int argc, char *argv[]) {
     }
   } else {
     availableScenes["Ram_5Frames"]->play(); 
+  }
+
+  for(std::map<std::string,PreconfiguredScene*>::const_iterator it = availableScenes.begin(); it!=availableScenes.end(); ++it) {
+    std::cout << "Releasing scene '" << it->first << "'" << std::endl;
+    delete it->second;
   }
 
   return EXIT_SUCCESS;

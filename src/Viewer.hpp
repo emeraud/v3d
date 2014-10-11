@@ -16,7 +16,7 @@ public:
 
 private:
   SDL_Surface *   _pixels[SCREEN_WIDTH][SCREEN_HEIGHT];
-  SDL_Surface *   _screen;
+  SDL_Surface *   _screen; // freed by SQL_QUIT
 };
 
 #endif
