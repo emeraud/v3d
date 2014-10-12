@@ -19,6 +19,8 @@ int main(int argc, char *argv[]) {
   std::map<std::string,PreconfiguredScene*> availableScenes; 
   availableScenes["Ram_5Frames"] = new Scene_Ram_5Frames(); 
   availableScenes["Bunny_3Frames"] = new Scene_Bunny_3Frames(); 
+  availableScenes["Bunny_10Frames"] = new Scene_Bunny_10Frames(); 
+  availableScenes["Bunny_40Frames"] = new Scene_Bunny_40Frames(); 
   availableScenes["Monkey_4Frames"] = new Scene_Monkey_4Frames(); 
 
   if (argc == 3) {

@@ -36,6 +36,9 @@ void Renderer::computeConstants() {
 
 Pixel** Renderer::render() {
   computeConstants();
+
+#ifdef NB_THREADS
+  std::cout << "Multithreaded rendering with " << NB_THREADS << " threads" << std::endl;
   std::thread threads[NB_THREADS];
   int nbBlocks = SCREEN_WIDTH / NB_THREADS;
   int currentLine = 0;
@@ -54,6 +57,14 @@ Pixel** Renderer::render() {
       }
     }
   }
+#else
+  std::cout << "Monothreaded rendering" << std::endl;
+  for (int i=0; i<SCREEN_WIDTH; i++) {
+    for (int j=0; j<SCREEN_HEIGHT; j++) {
+      renderPixel(i, j);
+    }
+  }
+#endif
 
   return _pixelGrid;
 }

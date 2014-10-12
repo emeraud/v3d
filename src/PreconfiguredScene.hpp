@@ -39,10 +39,6 @@ class PreconfiguredScene {
 };
 
 class Scene_Ram_5Frames : public PreconfiguredScene {
-  public:
-    Scene_Ram_5Frames () : PreconfiguredScene() {}
-    virtual ~Scene_Ram_5Frames () { }
-
   protected:
     virtual void _configure() {
       _animationManager.getScene().addLight(Light(Vec3Df(2.f, 2.f, 2.f), Vec3Df(1.f, 1.f, 1.f), 1.f));
@@ -53,10 +49,6 @@ class Scene_Ram_5Frames : public PreconfiguredScene {
 };
 
 class Scene_Bunny_3Frames : public PreconfiguredScene {
-  public:
-    Scene_Bunny_3Frames () : PreconfiguredScene() {}
-    virtual ~Scene_Bunny_3Frames () { }
-
   protected:
     virtual void _configure() {
       _animationManager.getScene().addLight(Light(Vec3Df(2.f, 2.f, 2.f), Vec3Df(1.f, 1.f, 1.f), 1.f));
@@ -66,11 +58,27 @@ class Scene_Bunny_3Frames : public PreconfiguredScene {
     }
 };
 
-class Scene_Monkey_4Frames : public PreconfiguredScene {
-  public:
-    Scene_Monkey_4Frames () : PreconfiguredScene() {}
-    virtual ~Scene_Monkey_4Frames () { }
+class Scene_Bunny_10Frames : public PreconfiguredScene {
+  protected:
+    virtual void _configure() {
+      _animationManager.getScene().addLight(Light(Vec3Df(2.f, 2.f, 2.f), Vec3Df(1.f, 1.f, 1.f), 1.f));
+      _animationManager.getScene().addObject(new Object3D(Connector3D::parseFile("/home/val/Documents/dev/3d/raytracer/models/bunny.off")));
+      _animationManager.setNbFrames(10);
+      _activateBench = true;
+    }
+};
 
+class Scene_Bunny_40Frames : public PreconfiguredScene {
+  protected:
+    virtual void _configure() {
+      _animationManager.getScene().addLight(Light(Vec3Df(2.f, 2.f, 2.f), Vec3Df(1.f, 1.f, 1.f), 1.f));
+      _animationManager.getScene().addObject(new Object3D(Connector3D::parseFile("/home/val/Documents/dev/3d/raytracer/models/bunny.off")));
+      _animationManager.setNbFrames(40);
+      _activateBench = true;
+    }
+};
+
+class Scene_Monkey_4Frames : public PreconfiguredScene {
   protected:
     virtual void _configure() {
       _animationManager.getScene().addLight(Light(Vec3Df(2.f, 2.f, 2.f), Vec3Df(1.f, 1.f, 1.f), 1.f));

@@ -1,8 +1,9 @@
 #ifndef CONFIG_HPP
 #define CONFIG_HPP
 
-#define SCREEN_WIDTH 640
-#define SCREEN_HEIGHT 480
-#define NB_THREADS 8
+#define SCREEN_WIDTH 1024
+#define SCREEN_HEIGHT 768
+
+#define NB_THREADS 16
 
 #endif
