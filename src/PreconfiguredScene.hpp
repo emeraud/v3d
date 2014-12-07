@@ -71,7 +71,8 @@ class Scene_Bunny_10Frames : public PreconfiguredScene {
 class Scene_Bunny_40Frames : public PreconfiguredScene {
   protected:
     virtual void _configure() {
-      _animationManager.getScene().addLight(Light(Vec3Df(2.f, 2.f, 2.f), Vec3Df(1.f, 1.f, 1.f), 1.f));
+      _animationManager.getScene().addLight(Light(Vec3Df(-2.f, -2.f, -2.f), Vec3Df(0.f, 0.f, 1.f), 1.f));
+      _animationManager.getScene().addLight(Light(Vec3Df(2.f, 0.f, -2.f), Vec3Df(1.f, 0.f,0.f), 1.f));
       _animationManager.getScene().addObject(new Object3D(Connector3D::parseFile("/home/val/Documents/dev/3d/raytracer/models/bunny.off")));
       _animationManager.setNbFrames(40);
       _activateBench = true;

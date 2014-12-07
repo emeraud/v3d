@@ -91,8 +91,30 @@ void Renderer::renderPixel(int x, int y) {
   Vec3Df yOffset = _startY + float(y) * _stepY;
   Ray ray(_camera->pos, _camera->dir + xOffset + yOffset);
 
+
+  Vec3Df dirToLight;
+  Vec3Df lightIntersectionPoint;
+  Vec3Df lightIntersectionNormal;
+
   if (object->intersect(ray, intersectionPoint, intersectionNormal)) {
-    BRDF::getColor(_camera->pos, intersectionPoint, intersectionNormal, object->getMaterial(), _scene->getLights(), c);
+#ifdef ENABLE_SHADOW
+    std::vector<Light> keptLights;
+    for (UInt i=0; i<_scene->getLights().size(); i++) {
+      dirToLight = _scene->getLights()[i].getPos() - intersectionPoint;
+      dirToLight.normalize();
+      Ray ray(intersectionPoint + EPSILON * dirToLight, dirToLight);
+      if (object->intersect(ray, lightIntersectionPoint, lightIntersectionNormal)) {
+        keptLights.push_back(_scene->getLights()[i]);
+      }
+    }
+    if (keptLights.size() > 0) {
+      BRDF::getColor(_camera->pos, intersectionPoint, intersectionNormal, object->getMaterial(), keptLights, c);
+    }
+#else
+    if (object->intersect(ray, lightIntersectionPoint, lightIntersectionNormal)) {
+      BRDF::getColor(_camera->pos, intersectionPoint, intersectionNormal, object->getMaterial(), _scene->getLights(), c);
+    }
+#endif
   }
   
   _pixelGrid[x][y].r = c[0];

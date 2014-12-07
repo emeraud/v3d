@@ -62,7 +62,6 @@ bool Object3D::intersect(const Ray& ray, Vec3Df& intersectionPoint, Vec3Df& inte
   if (minDist != FLT_MAX) {
     intersectionPoint = ray.getOrigin() + minDist * ray.getDirection();
     intersectionNormal = (1.f - uI -vI) * bestTriangle.v0->normal + uI * bestTriangle.v1->normal + vI * bestTriangle.v2->normal;
-    intersectionNormal = -1.f * intersectionNormal;
     intersectionNormal.normalize();
     return true;
   }

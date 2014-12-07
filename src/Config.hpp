@@ -5,5 +5,6 @@
 #define SCREEN_HEIGHT 768
 
 #define NB_THREADS 16
+#define ENABLE_SHADOW 1
 
 #endif
