@@ -34,6 +34,7 @@ class Tessellation3D {
     TriangleVertices getTriangleVertices(UInt idx) const;
     void setVertex(UInt idx, float x, float y, float z);
     void setTriangle(UInt idx, UInt v0, UInt v1, UInt v2);
+    void applyTranslation(const Vec3Df &translation);
     void computeVerticesNormals();
 
     std::vector<const Vertex*> getVerticesView(); 

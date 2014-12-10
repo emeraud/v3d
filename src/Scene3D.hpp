@@ -17,6 +17,10 @@ class Scene3D {
     std::vector<const Object3D*> getObjects();
     std::vector<Light> getLights();
 
+  public:
+    bool intersect(const Ray& ray, Vec3Df& intersectionPoint, Vec3Df& intersectionNormal, const Object3D* &object) const;
+    
+
   private:
     std::vector<Object3D*>      _objects;
     std::vector<Light>          _lights;

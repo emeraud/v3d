@@ -1,17 +1,6 @@
 #include <iostream>
-#include <chrono>
 #include <string>
 #include <map>
-
-#include <SDL/SDL.h>
-
-#include "Viewer.hpp"
-#include "AnimationManager.hpp"
-#include "Connector3D.hpp"
-#include "Scene3D.hpp"
-#include "Object3D.hpp"
-#include "Light.hpp"
-#include "Vec3D.h"
 
 #include "PreconfiguredScene.hpp"
 
@@ -22,6 +11,7 @@ int main(int argc, char *argv[]) {
   availableScenes["Bunny_10Frames"] = new Scene_Bunny_10Frames(); 
   availableScenes["Bunny_40Frames"] = new Scene_Bunny_40Frames(); 
   availableScenes["Monkey_4Frames"] = new Scene_Monkey_4Frames(); 
+  availableScenes["MonkeyAndBunny_40Frames"] = new Scene_MonkeyAndBunny_40Frames(); 
 
   if (argc == 3) {
     if (std::string(argv[1]).compare("play") == 0) {

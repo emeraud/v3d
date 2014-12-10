@@ -34,3 +34,24 @@ std::vector<Light> Scene3D::getLights() {
   }
   return lights;
 }
+
+bool Scene3D::intersect(const Ray& ray, Vec3Df& intersectionPoint, Vec3Df& intersectionNormal, const Object3D* &object) const {
+  Vec3Df tempIntersectionPoint, tempIntersectionNormal;
+  float sqDist = FLT_MAX;
+  float sqMinDist = FLT_MAX;
+
+  for (std::vector<Object3D*>::const_iterator it = _objects.begin(); it != _objects.end(); ++it) {
+    if ((*it)->intersect(ray, tempIntersectionPoint, tempIntersectionNormal)) {
+      sqDist = Vec3Df::squaredDistance(tempIntersectionPoint, ray.getOrigin());
+      if (sqDist < sqMinDist) {
+        sqMinDist = sqDist;
+        intersectionPoint = tempIntersectionPoint;
+        intersectionNormal = tempIntersectionNormal;
+        object = (*it);
+      }
+    }
+  }
+
+  return sqMinDist != FLT_MAX;
+}
+

@@ -9,7 +9,7 @@ SRCDIR=src/
 
 SRCTEMP=Viewer.cpp Triangle.cpp Ray.cpp Tessellation3D.cpp \
 KDTree.cpp Object3D.cpp Connector3D.cpp Scene3D.cpp \
-Renderer.cpp AnimationManager.cpp Main.cpp
+Renderer.cpp AnimationManager.cpp PreconfiguredScene.cpp Main.cpp
 
 OBJTEMP=$(SRCTEMP:.cpp=.o)
 SRC=$(addprefix $(SRCDIR), $(SRCTEMP))
@@ -22,7 +22,9 @@ $(EXEC): $(OBJ)
 
 $(SRCDIR)BRDF.h: $(SRCDIR)Material.hpp $(SRCDIR)Types.hpp
 
-$(OBJDIR)Main.o: $(SRCDIR)Viewer.hpp $(SRCDIR)AnimationManager.hpp $(SRCDIR)PreconfiguredScene.hpp \
+$(OBJDIR)Main.o: $(SRCDIR)PreconfiguredScene.hpp 
+
+$(OBJDIR)PreconfiguredScene.o: $(SRCDIR)Viewer.hpp $(SRCDIR)AnimationManager.hpp $(SRCDIR)PreconfiguredScene.hpp \
 $(SRCDIR)Scene3D.hpp $(SRCDIR)Renderer.hpp $(SRCDIR)Connector3D.hpp $(SRCDIR)Vec3D.h
 
 $(OBJDIR)AnimationManager.o: $(SRCDIR)Viewer.hpp $(SRCDIR)Renderer.hpp $(SRCDIR)Scene3D.hpp

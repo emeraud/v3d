@@ -67,6 +67,12 @@ std::vector<UInt> Tessellation3D::getTrianglesView() {
   return trianglesView;
 }
 
+void Tessellation3D::applyTranslation(const Vec3Df &translation) {
+  for (UInt i=0; i<_vertices.size(); i++) {
+    _vertices[i]->pos += translation;
+  }
+}
+
 void Tessellation3D::computeVerticesNormals() {
   std::vector<Vec3Df> triangleNormals;
   std::vector<float> triangleAreas;

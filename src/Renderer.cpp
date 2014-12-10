@@ -96,7 +96,7 @@ void Renderer::renderPixel(int x, int y) {
   Vec3Df lightIntersectionPoint;
   Vec3Df lightIntersectionNormal;
 
-  if (object->intersect(ray, intersectionPoint, intersectionNormal)) {
+  if (_scene->intersect(ray, intersectionPoint, intersectionNormal, object)) {
 #ifdef ENABLE_SHADOW
     std::vector<Light> keptLights;
     for (UInt i=0; i<_scene->getLights().size(); i++) {

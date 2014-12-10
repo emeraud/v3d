@@ -4,13 +4,22 @@
 #include <cfloat>
 
 Object3D::Object3D(Tessellation3D* tessellation) : _tessellation(tessellation) {
-  _tessellation->computeVerticesNormals();
-  _kdTree = new KDTree(_tessellation);
+  init();
+}
+
+Object3D::Object3D(Tessellation3D* tessellation, const Vec3Df &position) : _tessellation(tessellation) {
+  _tessellation->applyTranslation(position);
+  init();
 }
 
 Object3D::~Object3D() {
   delete _kdTree;
   delete _tessellation;
+}
+
+void Object3D::init() {
+  _tessellation->computeVerticesNormals();
+  _kdTree = new KDTree(_tessellation);
 }
 
 Material Object3D::getMaterial() const {
