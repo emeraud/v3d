@@ -28,6 +28,8 @@ class PreconfiguredScene {
     Tessellation3D* getRam();
     Tessellation3D* getBunny();
     Tessellation3D* getMonkey();
+    Tessellation3D* getRhino();
+    Tessellation3D* getGargoyle();
     Tessellation3D* getGround();
 
   protected:
@@ -67,6 +69,11 @@ class Scene_MonkeyAndBunny_40Frames : public PreconfiguredScene {
 };
 
 class Scene_Nightclub : public PreconfiguredScene {
+  protected:
+    virtual void _configure();
+};
+
+class Scene_Animals : public PreconfiguredScene {
   protected:
     virtual void _configure();
 };

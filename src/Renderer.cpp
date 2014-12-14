@@ -92,12 +92,11 @@ void Renderer::renderPixel(int x, int y) {
   Ray ray(_camera->pos, _camera->dir + xOffset + yOffset);
 
 #ifdef DISPLAY_LIGHTS_SOURCES
-  // Display light sources as a cube
-  Vec3Df smallVec = 0.05f * Vec3Df(1.f, 1.f, 1.f);
+  // Display light sources as a sphere
   for (UInt i=0; i<_scene->getLights().size(); i++) {
     Light light = _scene->getLights()[i];
-    BoundingBox lightBox(light.getPos() - smallVec, light.getPos() + smallVec);
-    if (ray.intersect(lightBox)) {
+    Vec3Df intersectionPoint, intersectionNormal;
+    if (ray.intersect(light.getPos(), 0.01f, intersectionPoint, intersectionNormal)) {
       _pixelGrid[x][y].r = 50;
       _pixelGrid[x][y].g = 0;
       _pixelGrid[x][y].b = 0;

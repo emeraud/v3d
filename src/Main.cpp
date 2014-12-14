@@ -12,6 +12,8 @@ int main(int argc, char *argv[]) {
   availableScenes["Bunny_40Frames"] = new Scene_Bunny_40Frames(); 
   availableScenes["Monkey_4Frames"] = new Scene_Monkey_4Frames(); 
   availableScenes["MonkeyAndBunny_40Frames"] = new Scene_MonkeyAndBunny_40Frames(); 
+  availableScenes["Nightclub"] = new Scene_Nightclub(); 
+  availableScenes["Animals"] = new Scene_Animals(); 
   availableScenes["test"] = new Scene_test(); 
 
   if (argc == 3) {

@@ -37,6 +37,8 @@ class Ray {
     bool intersect (const Vec3Df iV0, const Vec3Df iV1, const Vec3Df iV2,
                     float &oT, float &oU, float &oV) const;
     
+    // ray-sphere
+    bool intersect (const Vec3Df& sphereCenter, float sphereRadius, Vec3Df& intersectionPoint, Vec3Df& intersectionNormal) const;
   private:
     Vec3Df _origin;
     Vec3Df _direction;

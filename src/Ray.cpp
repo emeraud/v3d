@@ -139,3 +139,21 @@ bool Ray::intersect(const Vec3Df v0, const Vec3Df v1, const Vec3Df v2,
   return oT > EPSILON;
 }
 
+// geometric solution
+// cf http://www.scratchapixel.com/old/lessons/3d-basic-lessons/lesson-7-intersecting-simple-shapes/ray-sphere-intersection/
+bool Ray::intersect (const Vec3Df& sphereCenter, float sphereRadius, Vec3Df& intersectionPoint, Vec3Df& intersectionNormal) const {
+  Vec3Df L = sphereCenter - _origin;
+  float tca = Vec3Df::dotProduct(L, _direction);
+  if (tca < 0.f) return false;
+  float d2 = Vec3Df::dotProduct(L,L) - tca * tca;
+  if (d2 > sphereRadius) return false;
+  float thc = sqrt(sphereRadius - d2);
+  float t0 = tca - thc;
+  float t1 = tca + thc;
+
+  intersectionPoint = _origin + std::min(t0, t1) * _direction;
+  intersectionNormal = intersectionPoint - sphereCenter;
+  intersectionNormal.normalize();
+  return true;
+}
+
