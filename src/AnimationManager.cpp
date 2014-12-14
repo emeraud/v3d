@@ -20,6 +20,12 @@ AnimationManager::~AnimationManager() {
 }
 
 void AnimationManager::run() {
+  std::cout << "Running animation with " << _nbFrames << " frames" << std::endl;
+#ifdef NB_THREADS
+  std::cout << "Multithreaded rendering with " << NB_THREADS << " threads" << std::endl;
+#else
+  std::cout << "Monothreaded rendering" << std::endl;
+#endif
   while (true) {
     if (_onExit) {
       break;
@@ -52,7 +58,6 @@ void AnimationManager::move() {
 }
 
 Pixel** AnimationManager::getNextImage() {
-  std::cout << "Remaining frames to display: " << _nbFrames << std::endl;
   move();
   return _renderer->render();
 }

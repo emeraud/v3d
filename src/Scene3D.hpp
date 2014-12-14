@@ -16,10 +16,11 @@ class Scene3D {
     void addLight(Light light);
     std::vector<const Object3D*> getObjects();
     std::vector<Light> getLights();
+    void prepare(); // normalize light intensities
 
   public:
-    bool intersect(const Ray& ray, Vec3Df& intersectionPoint, Vec3Df& intersectionNormal, const Object3D* &object) const;
-    
+    bool getIntersected(const Ray& ray, Vec3Df& intersectionPoint, Vec3Df& intersectionNormal, const Object3D* &object) const;
+    bool isShadow(const Ray& ray, const Object3D* &object) const;
 
   private:
     std::vector<Object3D*>      _objects;

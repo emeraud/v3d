@@ -12,6 +12,7 @@ int main(int argc, char *argv[]) {
   availableScenes["Bunny_40Frames"] = new Scene_Bunny_40Frames(); 
   availableScenes["Monkey_4Frames"] = new Scene_Monkey_4Frames(); 
   availableScenes["MonkeyAndBunny_40Frames"] = new Scene_MonkeyAndBunny_40Frames(); 
+  availableScenes["test"] = new Scene_test(); 
 
   if (argc == 3) {
     if (std::string(argv[1]).compare("play") == 0) {
@@ -19,6 +20,11 @@ int main(int argc, char *argv[]) {
         availableScenes[std::string(argv[2])]->play();
       } else {
         std::cout << "Scene: '" << argv[2] << "' not found" << std::endl;
+        std::cout << "Available scenes:" << std::endl;
+        for (std::map<std::string,PreconfiguredScene*>::iterator it=availableScenes.begin();
+              it != availableScenes.end(); ++it) {
+          std::cout << "..." << it->first << std::endl;
+        }
       }
     } else {
       std::cout << "Command: '" << argv[1] << "' not recognized" << std::endl;
@@ -37,7 +43,7 @@ int main(int argc, char *argv[]) {
   }
 
   for(std::map<std::string,PreconfiguredScene*>::const_iterator it = availableScenes.begin(); it!=availableScenes.end(); ++it) {
-    std::cout << "Releasing scene '" << it->first << "'" << std::endl;
+    //std::cout << "Releasing scene '" << it->first << "'" << std::endl;
     delete it->second;
   }
 

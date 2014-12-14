@@ -19,6 +19,20 @@ void Scene3D::addLight(Light light) {
   _lights.push_back(light);
 }
 
+void Scene3D::prepare() {
+  if (_lights.size() > 1) {
+    float totalIntensity = 0.f;
+    for (UInt i=0; i<_lights.size(); i++) {
+      totalIntensity += _lights[i].getIntensity();
+    }
+    if (totalIntensity > 0.f) {
+      for (UInt i=0; i<_lights.size(); i++) {
+        _lights[i].setIntensity(_lights[i].getIntensity() / totalIntensity);
+      }
+    }
+  }
+}
+
 std::vector<const Object3D*> Scene3D::getObjects() {
   std::vector<const Object3D*> objects;
   for (std::vector<Object3D*>::const_iterator it = _objects.begin(); it != _objects.end(); ++it) {
@@ -35,7 +49,7 @@ std::vector<Light> Scene3D::getLights() {
   return lights;
 }
 
-bool Scene3D::intersect(const Ray& ray, Vec3Df& intersectionPoint, Vec3Df& intersectionNormal, const Object3D* &object) const {
+bool Scene3D::getIntersected(const Ray& ray, Vec3Df& intersectionPoint, Vec3Df& intersectionNormal, const Object3D* &object) const {
   Vec3Df tempIntersectionPoint, tempIntersectionNormal;
   float sqDist = FLT_MAX;
   float sqMinDist = FLT_MAX;
@@ -53,5 +67,20 @@ bool Scene3D::intersect(const Ray& ray, Vec3Df& intersectionPoint, Vec3Df& inter
   }
 
   return sqMinDist != FLT_MAX;
+}
+
+
+bool Scene3D::isShadow(const Ray& ray, const Object3D* &object) const {
+  Vec3Df tempIntersectionPoint, tempIntersectionNormal;
+  for (std::vector<Object3D*>::const_iterator it = _objects.begin(); it != _objects.end(); ++it) {
+    if ((*it) == object) {
+      // ignore source object
+      continue;
+    }
+    if ((*it)->intersect(ray, tempIntersectionPoint, tempIntersectionNormal)) {
+      return true;
+    }
+  }
+  return false;
 }
 

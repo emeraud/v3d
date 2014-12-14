@@ -36,7 +36,7 @@ class BRDF
         if ((temp > 0.f && temp > EPSILON) || (temp < 0.f && temp < EPSILON)) {
           temp = sqrt(temp);
           blinn = (1.f/temp) * blinn;
-          float blinnTerm = Vec3Df::dotProduct(blinn,-objNormal);
+          float blinnTerm = Vec3Df::dotProduct(blinn,objNormal);
           blinnTerm = blinnTerm > 0.f ? blinnTerm : 0.f;
           c += pow(blinnTerm,material.getSpecular()) * blinnTerm * lights[i].getColor();
         }

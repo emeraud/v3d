@@ -17,7 +17,7 @@ class Light {
 public:
     inline Light () : color (Vec3Df (1.0f, 1.0f, 1.0f)), intensity (1.0f) {}
     inline Light (const Vec3Df & pos, const Vec3Df & color, float intensity)
-        : pos (pos), color (color), intensity (intensity) {}
+        : pos (pos), color (color), intensity (intensity) { this->color.normalize();}
     virtual ~Light () {}
 
     inline const Vec3Df & getPos () const { return pos; }

@@ -6,5 +6,6 @@
 
 #define NB_THREADS 16
 #define ENABLE_SHADOW 1
+#define DISPLAY_LIGHTS_SOURCES 1
 
 #endif

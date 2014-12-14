@@ -91,37 +91,51 @@ bool Ray::intersect(const BoundingBox& bbox) const {
   return tmax >= MAX(0.f, tmin);
 }
 
+// Moller-Trumbore intersection algorithm
+// cf. http://en.wikipedia.org/wiki/M%C3%B6ller%E2%80%93Trumbore_intersection_algorithm
 bool Ray::intersect(const Vec3Df v0, const Vec3Df v1, const Vec3Df v2,
                      float &oT, float &oU, float &oV) const {
 
   Vec3Df e1, e2, h, s, q;
-  float a, f;
+  float det, inv_det;
 
+  //Find vectors for two edges sharing V1
   e1 = v1 - v0;
   e2 = v2 - v0;
 
+  //Begin calculating determinant - also used to calculate u parameter
   h = Vec3Df::crossProduct(_direction, e2);
-  a = Vec3Df::dotProduct(e1, h);
 
-  if (a > -EPSILON && a < EPSILON) {
+  //if determinant is near zero, ray lies in plane of triangle
+  det = Vec3Df::dotProduct(e1, h);
+
+  //CULLING IS OFF
+  if (det > -EPSILON && det < EPSILON) {
     return false;
   }
 
-  f = 1.f / a;
+  inv_det = 1.f / det;
+
+  //calculate distance from V1 to ray origin
   s = _origin - v0;
-  oU = f * Vec3Df::dotProduct(s, h);
+  oU = inv_det * Vec3Df::dotProduct(s, h);
 
   if (oU < .0f || oU > 1.f) {
+    //The intersection lies outside of the triangle
     return false;
   }
 
+  //Prepare to test v parameter
   q = Vec3Df::crossProduct(s, e1);
-  oV = f * Vec3Df::dotProduct(_direction, q);
+
+  //Calculate V parameter and test bound
+  oV = inv_det * Vec3Df::dotProduct(_direction, q);
   if(oV < .0f || oU + oV > 1.f) {
+    //The intersection lies outside of the triangle
     return false;
   }
 
-  oT = f * Vec3Df::dotProduct(e2, q);
+  oT = inv_det * Vec3Df::dotProduct(e2, q);
   return oT > EPSILON;
 }
 

@@ -31,14 +31,12 @@ void Renderer::computeConstants() {
 
   _stepX = 1.f/float(SCREEN_WIDTH) * _camera->right;
   _stepY = 1.f/float(SCREEN_HEIGHT) * _camera->up;
-
 }
 
 Pixel** Renderer::render() {
   computeConstants();
 
 #ifdef NB_THREADS
-  std::cout << "Multithreaded rendering with " << NB_THREADS << " threads" << std::endl;
   std::thread threads[NB_THREADS];
   int nbBlocks = SCREEN_WIDTH / NB_THREADS;
   int currentLine = 0;
@@ -58,7 +56,6 @@ Pixel** Renderer::render() {
     }
   }
 #else
-  std::cout << "Monothreaded rendering" << std::endl;
   for (int i=0; i<SCREEN_WIDTH; i++) {
     for (int j=0; j<SCREEN_HEIGHT; j++) {
       renderPixel(i, j);
@@ -72,6 +69,9 @@ Pixel** Renderer::render() {
 void Renderer::renderLine(int x) {
   for (int j=0; j<SCREEN_HEIGHT; j++) {
     renderPixel(x, j);
+    _pixelGrid[x][j].r = _pixelGrid[x][j].r > 255.f ? 255.f : _pixelGrid[x][j].r < 0.f ? 0.f : _pixelGrid[x][j].r;
+    _pixelGrid[x][j].g = _pixelGrid[x][j].g > 255.f ? 255.f : _pixelGrid[x][j].g < 0.f ? 0.f : _pixelGrid[x][j].g;
+    _pixelGrid[x][j].b = _pixelGrid[x][j].b > 255.f ? 255.f : _pixelGrid[x][j].b < 0.f ? 0.f : _pixelGrid[x][j].b;
   }
 }
 
@@ -85,25 +85,40 @@ void Renderer::renderPixel(int x, int y) {
   Vec3Df intersectionPoint;
   Vec3Df intersectionNormal;
   Vec3Df c = _defaultColor;
-  const Object3D* object = _scene->getObjects()[0];
+  const Object3D* object = 0x0;
   Vec3Df xOffset = _startX + float(x) * _stepX;
 
   Vec3Df yOffset = _startY + float(y) * _stepY;
   Ray ray(_camera->pos, _camera->dir + xOffset + yOffset);
+
+#ifdef DISPLAY_LIGHTS_SOURCES
+  // Display light sources as a cube
+  Vec3Df smallVec = 0.05f * Vec3Df(1.f, 1.f, 1.f);
+  for (UInt i=0; i<_scene->getLights().size(); i++) {
+    Light light = _scene->getLights()[i];
+    BoundingBox lightBox(light.getPos() - smallVec, light.getPos() + smallVec);
+    if (ray.intersect(lightBox)) {
+      _pixelGrid[x][y].r = 50;
+      _pixelGrid[x][y].g = 0;
+      _pixelGrid[x][y].b = 0;
+      return;
+    }
+  }
+#endif
 
 
   Vec3Df dirToLight;
   Vec3Df lightIntersectionPoint;
   Vec3Df lightIntersectionNormal;
 
-  if (_scene->intersect(ray, intersectionPoint, intersectionNormal, object)) {
+  if (_scene->getIntersected(ray, intersectionPoint, intersectionNormal, object)) {
 #ifdef ENABLE_SHADOW
     std::vector<Light> keptLights;
     for (UInt i=0; i<_scene->getLights().size(); i++) {
       dirToLight = _scene->getLights()[i].getPos() - intersectionPoint;
       dirToLight.normalize();
-      Ray ray(intersectionPoint + EPSILON * dirToLight, dirToLight);
-      if (object->intersect(ray, lightIntersectionPoint, lightIntersectionNormal)) {
+      Ray rayToLight(intersectionPoint + EPSILON * dirToLight, dirToLight);
+      if (!_scene->isShadow(rayToLight, object)) {
         keptLights.push_back(_scene->getLights()[i]);
       }
     }
@@ -111,7 +126,7 @@ void Renderer::renderPixel(int x, int y) {
       BRDF::getColor(_camera->pos, intersectionPoint, intersectionNormal, object->getMaterial(), keptLights, c);
     }
 #else
-    if (object->intersect(ray, lightIntersectionPoint, lightIntersectionNormal)) {
+    if (_scene->getIntersected(ray, lightIntersectionPoint, lightIntersectionNormal, object)) {
       BRDF::getColor(_camera->pos, intersectionPoint, intersectionNormal, object->getMaterial(), _scene->getLights(), c);
     }
 #endif
