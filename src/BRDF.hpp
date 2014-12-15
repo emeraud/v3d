@@ -38,7 +38,7 @@ class BRDF
           blinn = (1.f/temp) * blinn;
           float blinnTerm = Vec3Df::dotProduct(blinn,objNormal);
           blinnTerm = blinnTerm > 0.f ? blinnTerm : 0.f;
-          c += pow(blinnTerm,material.getSpecular()) * blinnTerm * lights[i].getColor();
+          c += pow(blinnTerm,material.getSpecular()) * blinnTerm * material.getColor() * lights[i].getColor();
         }
       }
 
