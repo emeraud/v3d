@@ -138,6 +138,27 @@ void Scene_Animals::_configure() {
   _activateBench = true;
 }
 
+void Scene_Animals_2Lights::_configure() {
+  _animationManager->getScene().addLight(Light(Vec3Df(3.f, 3.f, 3.f), Vec3Df(0.59f, 0.25f, 0.4f), 1.0f));
+  _animationManager->getScene().addLight(Light(Vec3Df(1.f, 0.5f, 10.f), Vec3Df(0.39f, 0.25f, 0.4f), 1.0f));
+
+  Object3D* ground = new Object3D(getGround());
+  Object3D* ram = new Object3D(getRam(), Vec3Df(1.f, 0.5f, 0.0f));
+  Object3D* rhino = new Object3D(getRhino(), Vec3Df(-1.f, -1.f, 0.4f));
+  Object3D* gargoyle = new Object3D(getGargoyle(), Vec3Df(-1.f, 1.f, 0.1f));
+
+  ram->setMaterial(Material(1.f, 1.f, Vec3Df (1.f, 0.6f, 0.2f)));
+  rhino->setMaterial(Material(1.0f, 0.2f, Vec3Df (0.6f, 0.6f, 0.7f)));
+  gargoyle->setMaterial(Material(0.7f, 0.4f, Vec3Df (0.5f, 0.8f, 0.5f)));
+
+  _animationManager->getScene().addObject(ground);
+  _animationManager->getScene().addObject(ram);
+  _animationManager->getScene().addObject(rhino);
+  _animationManager->getScene().addObject(gargoyle);
+  _animationManager->setNbFrames(40);
+  _activateBench = true;
+}
+
 void Scene_test::_configure() {
 //  _animationManager->getScene().addLight(Light(Vec3Df(3.f, 3.f, 3.f), Vec3Df(1.f, 1.f, 1.f), 1.0f));
   _animationManager->getScene().addLight(Light(Vec3Df(-2.1f, 0.0f, 1.5f), Vec3Df(1.f, 1.f, 1.f), 1.0f));
