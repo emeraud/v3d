@@ -1,25 +1,14 @@
 #include "Object3D.hpp"
 
-#include <iostream>
 #include <cfloat>
 
-Object3D::Object3D(Tessellation3D* tessellation) : _tessellation(tessellation) {
-  init();
-}
+// Base object implem
+Object3D::Object3D() {
 
-Object3D::Object3D(Tessellation3D* tessellation, const Vec3Df &position) : _tessellation(tessellation) {
-  _tessellation->applyTranslation(position);
-  init();
 }
 
 Object3D::~Object3D() {
-  delete _kdTree;
-  delete _tessellation;
-}
 
-void Object3D::init() {
-  _tessellation->computeVerticesNormals();
-  _kdTree = new KDTree(_tessellation);
 }
 
 Material Object3D::getMaterial() const {
@@ -31,6 +20,30 @@ void Object3D::setMaterial(const Material& material) {
 }
 
 bool Object3D::intersect(const Ray& ray, Vec3Df& intersectionPoint, Vec3Df& intersectionNormal) const {
+  return true;
+}
+
+// Triangular mesh implem
+MeshObject3D::MeshObject3D(Tessellation3D* tessellation) : _tessellation(tessellation) {
+  init();
+}
+
+MeshObject3D::MeshObject3D(Tessellation3D* tessellation, const Vec3Df &position) : _tessellation(tessellation) {
+  _tessellation->applyTranslation(position);
+  init();
+}
+
+MeshObject3D::~MeshObject3D() {
+  delete _kdTree;
+  delete _tessellation;
+}
+
+void MeshObject3D::init() {
+  _tessellation->computeVerticesNormals();
+  _kdTree = new KDTree(_tessellation);
+}
+
+bool MeshObject3D::intersect(const Ray& ray, Vec3Df& intersectionPoint, Vec3Df& intersectionNormal) const {
   std::vector<IntersectedNode> nodes;
   if (!_kdTree->getSortedIntersectedLeaves(ray, nodes)) {
     return false;

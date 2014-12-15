@@ -66,21 +66,21 @@ Tessellation3D* PreconfiguredScene::getGround() {
 
 void Scene_Ram_5Frames::_configure() {
   _animationManager->getScene().addLight(Light(Vec3Df(2.f, 2.f, 2.f), Vec3Df(1.f, 1.f, 1.f), 1.f));
-  _animationManager->getScene().addObject(new Object3D(getRam()));
+  _animationManager->getScene().addObject(new MeshObject3D(getRam()));
   _animationManager->setNbFrames(5);
   _activateBench = true;
 }
 
 void Scene_Bunny_3Frames::_configure() {
   _animationManager->getScene().addLight(Light(Vec3Df(2.f, 2.f, 2.f), Vec3Df(1.f, 1.f, 1.f), 1.f));
-  _animationManager->getScene().addObject(new Object3D(getBunny()));
+  _animationManager->getScene().addObject(new MeshObject3D(getBunny()));
   _animationManager->setNbFrames(3);
   _activateBench = true;
 }
 
 void Scene_Bunny_10Frames::_configure() {
   _animationManager->getScene().addLight(Light(Vec3Df(2.f, 2.f, 2.f), Vec3Df(1.f, 1.f, 1.f), 1.f));
-  _animationManager->getScene().addObject(new Object3D(getBunny()));
+  _animationManager->getScene().addObject(new MeshObject3D(getBunny()));
   _animationManager->setNbFrames(10);
   _activateBench = true;
 }
@@ -88,14 +88,14 @@ void Scene_Bunny_10Frames::_configure() {
 void Scene_Bunny_40Frames::_configure() {
   _animationManager->getScene().addLight(Light(Vec3Df(-2.f, -2.f, -2.f), Vec3Df(0.f, 0.f, 1.f), 1.f));
   _animationManager->getScene().addLight(Light(Vec3Df(2.f, 0.f, -2.f), Vec3Df(1.f, 0.f,0.f), 1.f));
-  _animationManager->getScene().addObject(new Object3D(getBunny()));
+  _animationManager->getScene().addObject(new MeshObject3D(getBunny()));
   _animationManager->setNbFrames(40);
   _activateBench = true;
 }
 
 void Scene_Monkey_4Frames::_configure() {
   _animationManager->getScene().addLight(Light(Vec3Df(2.f, 2.f, 2.f), Vec3Df(1.f, 1.f, 1.f), 1.f));
-  _animationManager->getScene().addObject(new Object3D(getMonkey()));
+  _animationManager->getScene().addObject(new MeshObject3D(getMonkey()));
   _animationManager->setNbFrames(4);
   _activateBench = true;
 }
@@ -103,8 +103,8 @@ void Scene_Monkey_4Frames::_configure() {
 void Scene_MonkeyAndBunny_40Frames::_configure() {
   _animationManager->getScene().addLight(Light(Vec3Df(3.f, 3.f, 3.f), Vec3Df(1.f, 1.f, 1.f), 1.f));
   _animationManager->getScene().addLight(Light(Vec3Df(0.1f, 0.0f, 0.5f), Vec3Df(1.f, 1.f, 1.f), 1.f));
-  _animationManager->getScene().addObject(new Object3D(getMonkey()));
-  _animationManager->getScene().addObject(new Object3D(getBunny(), Vec3Df(0.f, 0.f, 0.9f)));
+  _animationManager->getScene().addObject(new MeshObject3D(getMonkey()));
+  _animationManager->getScene().addObject(new MeshObject3D(getBunny(), Vec3Df(0.f, 0.f, 0.9f)));
   _animationManager->setNbFrames(40);
   _activateBench = true;
 }
@@ -112,8 +112,8 @@ void Scene_MonkeyAndBunny_40Frames::_configure() {
 void Scene_Nightclub::_configure() {
   _animationManager->getScene().addLight(Light(Vec3Df(3.f, 3.f, 3.f), Vec3Df(0.f, 1.f, 1.f), 0.8f));
   _animationManager->getScene().addLight(Light(Vec3Df(-2.1f, 0.0f, 1.5f), Vec3Df(1.f, 0.f, 1.f), 0.2f));
-  _animationManager->getScene().addObject(new Object3D(getBunny(), Vec3Df(0.f, 0.f, 0.9f)));
-  _animationManager->getScene().addObject(new Object3D(getGround(), Vec3Df(1.f,0.5f,0.f)));
+  _animationManager->getScene().addObject(new MeshObject3D(getBunny(), Vec3Df(0.f, 0.f, 0.9f)));
+  _animationManager->getScene().addObject(new MeshObject3D(getGround(), Vec3Df(1.f,0.5f,0.f)));
   _animationManager->setNbFrames(40);
   _activateBench = true;
 }
@@ -121,10 +121,10 @@ void Scene_Nightclub::_configure() {
 void Scene_Animals::_configure() {
   _animationManager->getScene().addLight(Light(Vec3Df(3.f, 3.f, 3.f), Vec3Df(1.f, 1.f, 1.f), 1.0f));
 
-  Object3D* ground = new Object3D(getGround());
-  Object3D* ram = new Object3D(getRam(), Vec3Df(1.f, 0.5f, 0.0f));
-  Object3D* rhino = new Object3D(getRhino(), Vec3Df(-1.f, -1.f, 0.4f));
-  Object3D* gargoyle = new Object3D(getGargoyle(), Vec3Df(-1.f, 1.f, 0.1f));
+  Object3D* ground = new MeshObject3D(getGround());
+  Object3D* ram = new MeshObject3D(getRam(), Vec3Df(1.f, 0.5f, 0.0f));
+  Object3D* rhino = new MeshObject3D(getRhino(), Vec3Df(-1.f, -1.f, 0.4f));
+  Object3D* gargoyle = new MeshObject3D(getGargoyle(), Vec3Df(-1.f, 1.f, 0.1f));
 
   ram->setMaterial(Material(1.f, 1.f, Vec3Df (1.f, 0.6f, 0.2f)));
   rhino->setMaterial(Material(1.0f, 0.2f, Vec3Df (0.6f, 0.6f, 0.7f)));
@@ -142,10 +142,10 @@ void Scene_Animals_2Lights::_configure() {
   _animationManager->getScene().addLight(Light(Vec3Df(3.f, 3.f, 3.f), Vec3Df(0.59f, 0.25f, 0.4f), 1.0f));
   _animationManager->getScene().addLight(Light(Vec3Df(1.f, 0.5f, 10.f), Vec3Df(0.39f, 0.25f, 0.4f), 1.0f));
 
-  Object3D* ground = new Object3D(getGround());
-  Object3D* ram = new Object3D(getRam(), Vec3Df(1.f, 0.5f, 0.0f));
-  Object3D* rhino = new Object3D(getRhino(), Vec3Df(-1.f, -1.f, 0.4f));
-  Object3D* gargoyle = new Object3D(getGargoyle(), Vec3Df(-1.f, 1.f, 0.1f));
+  Object3D* ground = new MeshObject3D(getGround());
+  Object3D* ram = new MeshObject3D(getRam(), Vec3Df(1.f, 0.5f, 0.0f));
+  Object3D* rhino = new MeshObject3D(getRhino(), Vec3Df(-1.f, -1.f, 0.4f));
+  Object3D* gargoyle = new MeshObject3D(getGargoyle(), Vec3Df(-1.f, 1.f, 0.1f));
 
   ram->setMaterial(Material(1.f, 1.f, Vec3Df (1.f, 0.6f, 0.2f)));
   rhino->setMaterial(Material(1.0f, 0.2f, Vec3Df (0.6f, 0.6f, 0.7f)));
@@ -162,9 +162,9 @@ void Scene_Animals_2Lights::_configure() {
 void Scene_test::_configure() {
 //  _animationManager->getScene().addLight(Light(Vec3Df(3.f, 3.f, 3.f), Vec3Df(1.f, 1.f, 1.f), 1.0f));
   _animationManager->getScene().addLight(Light(Vec3Df(-2.1f, 0.0f, 1.5f), Vec3Df(1.f, 1.f, 1.f), 1.0f));
-  _animationManager->getScene().addObject(new Object3D(getBunny(), Vec3Df(0.f, 0.f, 0.9f)));
-  _animationManager->getScene().addObject(new Object3D(getRam(), Vec3Df(1.f, 0.5f, 0.9f)));
-  _animationManager->getScene().addObject(new Object3D(getGround(), Vec3Df(1.f,0.5f,0.f)));
+  _animationManager->getScene().addObject(new MeshObject3D(getBunny(), Vec3Df(0.f, 0.f, 0.9f)));
+  _animationManager->getScene().addObject(new MeshObject3D(getRam(), Vec3Df(1.f, 0.5f, 0.9f)));
+  _animationManager->getScene().addObject(new MeshObject3D(getGround(), Vec3Df(1.f,0.5f,0.f)));
   _animationManager->setNbFrames(40);
   _activateBench = true;
 }
