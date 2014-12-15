@@ -25,7 +25,7 @@ int main(int argc, char *argv[]) {
         std::cout << "Available scenes:" << std::endl;
         for (std::map<std::string,PreconfiguredScene*>::iterator it=availableScenes.begin();
               it != availableScenes.end(); ++it) {
-          std::cout << "..." << it->first << std::endl;
+          std::cout << "... " << it->first << std::endl;
         }
       }
     } else {
@@ -37,8 +37,17 @@ int main(int argc, char *argv[]) {
         std::cout << "Playing scene '" << it->first << "'" << std::endl;
         it->second->play();
       }
+    } else if (std::string(argv[1]).compare("play") == 0) {
+      std::cout << "Available scenes:" << std::endl;
+      for (std::map<std::string,PreconfiguredScene*>::iterator it=availableScenes.begin();
+            it != availableScenes.end(); ++it) {
+        std::cout << "... " << it->first << std::endl;
+      }
     } else {
       std::cout << "Command: '" << argv[1] << "' not recognized" << std::endl;
+      std::cout << "Available commands:" << std::endl;
+      std::cout << "... bench" << std::endl;
+      std::cout << "... play" << std::endl;
     }
   } else {
     availableScenes["Ram_5Frames"]->play(); 
