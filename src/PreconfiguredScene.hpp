@@ -38,6 +38,11 @@ class PreconfiguredScene {
     bool                _activateBench;
 };
 
+class Scene_Primitives : public PreconfiguredScene {
+  protected:
+    virtual void _configure();
+};
+
 class Scene_Ram_5Frames : public PreconfiguredScene {
   protected:
     virtual void _configure();

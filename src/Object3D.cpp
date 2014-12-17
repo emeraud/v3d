@@ -91,3 +91,45 @@ bool MeshObject3D::intersect(const Ray& ray, Vec3Df& intersectionPoint, Vec3Df& 
   return false;
 }
 
+// Sphere implem
+SphereObject3D::SphereObject3D(Vec3Df center, float radius) : _center(center), _radius(radius) {
+
+}
+
+SphereObject3D::~SphereObject3D() {
+
+}
+
+bool SphereObject3D::intersect(const Ray& ray, Vec3Df& intersectionPoint, Vec3Df& intersectionNormal) const {
+  return ray.intersect(_center, _radius, intersectionPoint, intersectionNormal);
+}
+
+// Plan implem
+PlanObject3D::PlanObject3D(Vec3Df point, Vec3Df normal) : _point(point), _normal(normal) {
+  _normal.normalize();
+}
+
+PlanObject3D::~PlanObject3D() {
+
+}
+
+bool PlanObject3D::intersect(const Ray& ray, Vec3Df& intersectionPoint, Vec3Df& intersectionNormal) const {
+  float denominator = Vec3Df::dotProduct(_normal, ray.getDirection());
+  if (denominator > -EPSILON && denominator < EPSILON) {
+    // ray is parallel to plan
+    return false;
+  }
+
+  float t = Vec3Df::dotProduct(_normal, _point - ray.getOrigin()) / denominator;
+
+  if (t < 0.f) {
+    // plan is behind ray
+    return false;
+  }
+
+  intersectionPoint = ray.getOrigin() + t * ray.getDirection();
+  intersectionNormal = _normal;
+
+  return true;
+}
+

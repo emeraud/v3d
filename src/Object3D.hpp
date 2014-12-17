@@ -39,4 +39,30 @@ class MeshObject3D : public Object3D {
     KDTree*           _kdTree;
 };
 
+class SphereObject3D : public Object3D {
+  public:
+    SphereObject3D(Vec3Df center, float radius);
+    virtual ~SphereObject3D();
+
+  public:
+    virtual bool intersect(const Ray& ray, Vec3Df& intersectionPoint, Vec3Df& intersectionNormal) const;
+
+  private:
+    Vec3Df    _center;
+    float     _radius;
+};
+
+class PlanObject3D : public Object3D {
+  public:
+    PlanObject3D(Vec3Df point, Vec3Df normal);
+    virtual ~PlanObject3D();
+
+  public:
+    virtual bool intersect(const Ray& ray, Vec3Df& intersectionPoint, Vec3Df& intersectionNormal) const;
+
+  private:
+    Vec3Df    _point;
+    Vec3Df    _normal;
+};
+
 #endif

@@ -64,6 +64,26 @@ Tessellation3D* PreconfiguredScene::getGround() {
   return buildTessellation("/home/val/Documents/dev/v3d/models/ground.off");
 }
 
+void Scene_Primitives::_configure() {
+  _animationManager->getScene().addLight(Light(Vec3Df(5.f, 5.f, 5.f), Vec3Df(1.f, 1.f, 1.f), 1.f));
+
+  Object3D* plan1 = new PlanObject3D(Vec3Df(0.f, 0.f, 0.f), Vec3Df(0.f, 0.f, 1.f));
+  Object3D* sphere1 = new SphereObject3D(Vec3Df(1.5, 0.8, 0.5f), 0.5f);
+  Object3D* sphere2 = new SphereObject3D(Vec3Df(-0.5, -0.5, 0.5f), 0.5f);
+  Object3D* sphere3 = new SphereObject3D(Vec3Df(0.5f, 0.5f, 0.5f), 0.5f);
+
+  sphere1->setMaterial(Material(1.f, 1000.f, Vec3Df (1.f, 0.6f, 0.2f)));
+  sphere2->setMaterial(Material(1.f, 1000.f, Vec3Df (0.6f, 0.6f, 0.7f)));
+  sphere3->setMaterial(Material(0.7f, 1000.f, Vec3Df (0.5f, 0.8f, 0.5f)));
+
+  _animationManager->getScene().addObject(plan1);
+  _animationManager->getScene().addObject(sphere1);
+  _animationManager->getScene().addObject(sphere2);
+  _animationManager->getScene().addObject(sphere3);
+  _animationManager->setNbFrames(30);
+  _activateBench = true;
+}
+
 void Scene_Ram_5Frames::_configure() {
   _animationManager->getScene().addLight(Light(Vec3Df(2.f, 2.f, 2.f), Vec3Df(1.f, 1.f, 1.f), 1.f));
   _animationManager->getScene().addObject(new MeshObject3D(getRam()));

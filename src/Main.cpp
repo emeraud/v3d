@@ -6,6 +6,7 @@
 
 int main(int argc, char *argv[]) {
   std::map<std::string,PreconfiguredScene*> availableScenes; 
+  availableScenes["Primitives"] = new Scene_Primitives(); 
   availableScenes["Ram_5Frames"] = new Scene_Ram_5Frames(); 
   availableScenes["Bunny_3Frames"] = new Scene_Bunny_3Frames(); 
   availableScenes["Bunny_10Frames"] = new Scene_Bunny_10Frames(); 
