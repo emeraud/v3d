@@ -16,7 +16,7 @@ class Object3D {
     void setMaterial(const Material& material);
 
   public:
-    virtual bool intersect(const Ray& ray, Vec3Df& intersectionPoint, Vec3Df& intersectionNormal) const;
+    virtual bool intersect(const Ray& ray, Vec3Df& intersectionPoint, Vec3Df& intersectionNormal) const = 0;
 
   protected:
     Material          _material;

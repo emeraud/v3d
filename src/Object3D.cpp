@@ -19,10 +19,6 @@ void Object3D::setMaterial(const Material& material) {
   _material = material;
 }
 
-bool Object3D::intersect(const Ray& ray, Vec3Df& intersectionPoint, Vec3Df& intersectionNormal) const {
-  return true;
-}
-
 // Triangular mesh implem
 MeshObject3D::MeshObject3D(Tessellation3D* tessellation) : _tessellation(tessellation) {
   init();
