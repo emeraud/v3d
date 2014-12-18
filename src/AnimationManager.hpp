@@ -5,9 +5,10 @@
 
 #include "Types.hpp"
 #include "Scene3D.hpp"
-#include "Renderer.hpp"
+#include "Camera.hpp"
 
 class Viewer;
+class Renderer;
 
 class AnimationManager {
   public:
@@ -31,12 +32,14 @@ class AnimationManager {
 
   private:
     Viewer*       _viewer;
-    Camera        _camera;
+    Camera*       _camera;
     Renderer*     _renderer;
     Scene3D       _scene;
     bool          _onMove;
     bool          _onExit;
     UInt          _nbFrames;
+    float         _t; // parametric movement
+    float         _invFrames;
 };
 
 #endif

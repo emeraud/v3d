@@ -4,6 +4,7 @@
 
 #include "Config.hpp"
 #include "Object3D.hpp"
+#include "Camera.hpp"
 #include "BRDF.hpp"
 
 Renderer::Renderer(Scene3D* scene, Camera* camera) : _scene(scene), _camera(camera) {
@@ -26,11 +27,11 @@ Renderer::~Renderer() {
 }
 
 void Renderer::computeConstants() {
-  _startX = -0.5f * _camera->right;
-  _startY = -0.5f * _camera->up;
+  _startX = -0.5f * _camera->getRight();
+  _startY = -0.5f * _camera->getUp();
 
-  _stepX = 1.f/float(SCREEN_WIDTH) * _camera->right;
-  _stepY = 1.f/float(SCREEN_HEIGHT) * _camera->up;
+  _stepX = 1.f/float(SCREEN_WIDTH) * _camera->getRight();
+  _stepY = 1.f/float(SCREEN_HEIGHT) * _camera->getUp();
 }
 
 Pixel** Renderer::render() {
@@ -89,7 +90,7 @@ void Renderer::renderPixel(int x, int y) {
   Vec3Df xOffset = _startX + float(x) * _stepX;
 
   Vec3Df yOffset = _startY + float(y) * _stepY;
-  Ray ray(_camera->pos, _camera->dir + xOffset + yOffset);
+  Ray ray(_camera->getPos(), _camera->getDir() + xOffset + yOffset);
 
 #ifdef DISPLAY_LIGHTS_SOURCES
   // Display light sources as a sphere
@@ -122,11 +123,11 @@ void Renderer::renderPixel(int x, int y) {
       }
     }
     if (keptLights.size() > 0) {
-      BRDF::getColor(_camera->pos, intersectionPoint, intersectionNormal, object->getMaterial(), keptLights, c);
+      BRDF::getColor(_camera->getPos(), intersectionPoint, intersectionNormal, object->getMaterial(), keptLights, c);
     }
 #else
     if (_scene->getIntersected(ray, lightIntersectionPoint, lightIntersectionNormal, object)) {
-      BRDF::getColor(_camera->pos, intersectionPoint, intersectionNormal, object->getMaterial(), _scene->getLights(), c);
+      BRDF::getColor(_camera->getPos(), intersectionPoint, intersectionNormal, object->getMaterial(), _scene->getLights(), c);
     }
 #endif
   }

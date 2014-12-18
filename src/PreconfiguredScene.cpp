@@ -141,7 +141,7 @@ void Scene_Nightclub::_configure() {
 void Scene_Animals::_configure() {
   _animationManager->getScene().addLight(Light(Vec3Df(3.f, 3.f, 3.f), Vec3Df(1.f, 1.f, 1.f), 1.0f));
 
-  Object3D* ground = new MeshObject3D(getGround());
+  Object3D* ground = new PlanObject3D(Vec3Df(0.f, 0.f, 0.f), Vec3Df(0.f, 0.f, 1.f));
   Object3D* ram = new MeshObject3D(getRam(), Vec3Df(1.f, 0.5f, 0.0f));
   Object3D* rhino = new MeshObject3D(getRhino(), Vec3Df(-1.f, -1.f, 0.4f));
   Object3D* gargoyle = new MeshObject3D(getGargoyle(), Vec3Df(-1.f, 1.f, 0.1f));
@@ -186,6 +186,25 @@ void Scene_test::_configure() {
   _animationManager->getScene().addObject(new MeshObject3D(getRam(), Vec3Df(1.f, 0.5f, 0.9f)));
   _animationManager->getScene().addObject(new MeshObject3D(getGround(), Vec3Df(1.f,0.5f,0.f)));
   _animationManager->setNbFrames(40);
+  _activateBench = true;
+}
+
+void Scene_Room::_configure() {
+  _animationManager->getScene().addLight(Light(Vec3Df(0.f, 0.f, 5.f), Vec3Df(1.f, 1.f, 1.f), 1.f));
+
+  Object3D* plan1 = new PlanObject3D(Vec3Df(0.f, 0.f, 0.f), Vec3Df(0.f, 0.f, 1.f));
+  Object3D* plan2 = new PlanObject3D(Vec3Df(0.f, 1.f, 0.f), Vec3Df(0.f, -1.f, 0.f));
+
+  Object3D* sphere1 = new SphereObject3D(Vec3Df(0.0f, 0.0f, 0.5f), 0.5f);
+
+  plan1->setMaterial(Material(1.f, 1000.f, Vec3Df (1.f, 0.6f, 0.2f)));
+  plan2->setMaterial(Material(1.f, 1000.f, Vec3Df (0.6f, 0.6f, 0.7f)));
+  sphere1->setMaterial(Material(0.7f, 1000.f, Vec3Df (0.5f, 0.8f, 0.5f)));
+
+  _animationManager->getScene().addObject(plan1);
+  _animationManager->getScene().addObject(plan2);
+  _animationManager->getScene().addObject(sphere1);
+  _animationManager->setNbFrames(30);
   _activateBench = true;
 }
 

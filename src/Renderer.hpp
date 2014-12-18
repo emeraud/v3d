@@ -5,38 +5,7 @@
 #include "Types.hpp"
 #include "Vec3D.h"
 
-struct Camera {
-  Vec3Df   pos;
-  Vec3Df   dir;
-  Vec3Df   up;
-  Vec3Df   right;
-
-  public:
-    Camera() { }
-
-    Camera(Vec3Df _pos) {
-      updatePos(_pos);
-    }
-
-    Camera(Vec3Df _pos, Vec3Df _dir, Vec3Df _up, Vec3Df _right) : pos(_pos), dir(_dir), up(_up), right(_right) {
-      normalize();
-    }
-
-  public:
-    void updatePos(Vec3Df _pos) {
-      pos = _pos;
-      dir = - pos;
-      dir.getTwoOrthogonals(up, right);
-      normalize();
-    }
-
-  private:
-    void normalize() {
-      dir.normalize();
-      up.normalize();
-      right.normalize();
-    }
-};
+class Camera;
 
 class Renderer {
   public:

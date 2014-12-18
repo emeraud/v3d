@@ -88,6 +88,11 @@ class Scene_Animals_2Lights : public PreconfiguredScene {
     virtual void _configure();
 };
 
+class Scene_Room : public PreconfiguredScene {
+  protected:
+    virtual void _configure();
+};
+
 class Scene_test : public PreconfiguredScene {
   protected:
     virtual void _configure();
