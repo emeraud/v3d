@@ -33,7 +33,7 @@ class BRDF
         // specular part
         Vec3Df blinn = pointToLight + pointToCam;
         float temp = Vec3Df::dotProduct(blinn,blinn);
-        if ((temp > 0.f && temp > EPSILON) || (temp < 0.f && temp < EPSILON)) {
+        if (temp < -EPSILON || temp > EPSILON) {
           temp = sqrt(temp);
           blinn = (1.f/temp) * blinn;
           float blinnTerm = Vec3Df::dotProduct(blinn,objNormal);
