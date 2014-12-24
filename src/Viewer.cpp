@@ -34,8 +34,8 @@ void Viewer::update(Pixel** pixelGrid) {
   SDL_Rect pos;
   for (int i=0; i<SCREEN_WIDTH; i++) {
     for (int j=0; j<SCREEN_HEIGHT; j++) {
-      pos.x = i;
-      pos.y = j;
+      pos.x = SCREEN_WIDTH - i;
+      pos.y = SCREEN_HEIGHT - j;
       SDL_FillRect(_pixels[i][j], NULL, SDL_MapRGB(_screen->format, pixelGrid[i][j].r, pixelGrid[i][j].g, pixelGrid[i][j].b)); 
       SDL_BlitSurface(_pixels[i][j], NULL, _screen, &pos);
     }
