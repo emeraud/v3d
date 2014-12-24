@@ -26,7 +26,7 @@ class BRDF
         pointToLight.normalize();
 
         // diffuse part (calculate the cosine between normal and light direction)
-        float dot = Vec3Df::dotProduct(-objNormal,pointToLight);
+        float dot = Vec3Df::dotProduct(objNormal,pointToLight);
         dot = dot > 0.f ? dot : 0.f; // dot < 0: light at the wrong place
         c += material.getColor() * lights[i].getColor() * dot * material.getDiffuse();
 
