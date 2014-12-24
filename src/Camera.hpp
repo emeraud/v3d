@@ -13,16 +13,25 @@ class Camera {
     Vec3Df getRight();
     Vec3Df getPos();
     Vec3Df getDir();
+    float getFieldOfView();
+    float getAspectRatio();
+
+  public:
     void setUp(Vec3Df up);
     void setRight(Vec3Df right);
     void setPos(Vec3Df pos);
     void setDir(Vec3Df dir);
+    void setFieldOfView(float fieldOfView);
+    void setAspectRatio(float aspectRatio);
 
   private:
     Vec3Df   _pos;
     Vec3Df   _dir;
     Vec3Df   _up;
     Vec3Df   _right;
+
+    float    _fieldOfView;
+    float    _aspectRatio;
 };
 
 #endif

@@ -27,11 +27,16 @@ Renderer::~Renderer() {
 }
 
 void Renderer::computeConstants() {
-  _startX = -0.5f * _camera->getRight();
-  _startY = -0.5f * _camera->getUp();
+  float fov = tan(_camera->getFieldOfView());
 
-  _stepX = 1.f/float(SCREEN_WIDTH) * _camera->getRight();
-  _stepY = 1.f/float(SCREEN_HEIGHT) * _camera->getUp();
+  Vec3Df xVec = _camera->getAspectRatio() * fov * _camera->getRight();
+  Vec3Df yVec = fov * _camera->getUp();
+
+  _startX = -0.5f * xVec;
+  _startY = -0.5f * yVec;
+
+  _stepX = 1.f/float(SCREEN_WIDTH) * xVec;
+  _stepY = 1.f/float(SCREEN_HEIGHT) * yVec;
 }
 
 Pixel** Renderer::render() {
@@ -87,10 +92,12 @@ void Renderer::renderPixel(int x, int y) {
   Vec3Df intersectionNormal;
   Vec3Df c = _defaultColor;
   const Object3D* object = 0x0;
-  Vec3Df xOffset = _startX + float(x) * _stepX;
 
+  Vec3Df xOffset = _startX + float(x) * _stepX;
   Vec3Df yOffset = _startY + float(y) * _stepY;
-  Ray ray(_camera->getPos(), _camera->getDir() + xOffset + yOffset);
+  Vec3Df camDir = _camera->getDir() + xOffset + yOffset;
+  camDir.normalize();
+  Ray ray(_camera->getPos(), camDir);
 
 #ifdef DISPLAY_LIGHTS_SOURCES
   // Display light sources as a sphere
