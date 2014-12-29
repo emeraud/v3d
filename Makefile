@@ -27,6 +27,10 @@ $(OBJDIR)Main.o: $(SRCDIR)PreconfiguredScene.hpp
 $(OBJDIR)PreconfiguredScene.o: $(SRCDIR)Viewer.hpp $(SRCDIR)AnimationManager.hpp $(SRCDIR)PreconfiguredScene.hpp \
 $(SRCDIR)Scene3D.hpp $(SRCDIR)Renderer.hpp $(SRCDIR)Connector3D.hpp $(SRCDIR)Vec3D.h
 
+$(OBJDIR)Viewer.o: $(SRCDIR)Config.hpp
+
+$(OBJDIR)Camera.o: $(SRCDIR)Config.hpp
+
 $(OBJDIR)AnimationManager.o: $(SRCDIR)Viewer.hpp $(SRCDIR)Camera.hpp $(SRCDIR)Renderer.hpp $(SRCDIR)Scene3D.hpp
 
 $(OBJDIR)Renderer.o: $(SRCDIR)Camera.hpp $(SRCDIR)Scene3D.hpp $(SRCDIR)Object3D.hpp \

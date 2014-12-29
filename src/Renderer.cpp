@@ -114,18 +114,16 @@ void Renderer::renderPixel(int x, int y) {
 #endif
 
 
-  Vec3Df dirToLight;
-  Vec3Df lightIntersectionPoint;
-  Vec3Df lightIntersectionNormal;
 
   if (_scene->getIntersected(ray, intersectionPoint, intersectionNormal, object)) {
 #ifdef ENABLE_SHADOW
     std::vector<Light> keptLights;
     for (UInt i=0; i<_scene->getLights().size(); i++) {
-      dirToLight = _scene->getLights()[i].getPos() - intersectionPoint;
+      Vec3Df dirToLight = _scene->getLights()[i].getPos() - intersectionPoint;
+      float sqMaxLength = dirToLight.getSquaredLength();
       dirToLight.normalize();
       Ray rayToLight(intersectionPoint + EPSILON * dirToLight, dirToLight);
-      if (!_scene->isShadow(rayToLight, object)) {
+      if (!_scene->isShadow(rayToLight, object, sqMaxLength)) {
         keptLights.push_back(_scene->getLights()[i]);
       }
     }
@@ -133,9 +131,7 @@ void Renderer::renderPixel(int x, int y) {
       BRDF::getColor(_camera->getPos(), intersectionPoint, intersectionNormal, object->getMaterial(), keptLights, c);
     }
 #else
-    if (_scene->getIntersected(ray, lightIntersectionPoint, lightIntersectionNormal, object)) {
-      BRDF::getColor(_camera->getPos(), intersectionPoint, intersectionNormal, object->getMaterial(), _scene->getLights(), c);
-    }
+    BRDF::getColor(_camera->getPos(), intersectionPoint, intersectionNormal, object->getMaterial(), _scene->getLights(), c);
 #endif
   }
   

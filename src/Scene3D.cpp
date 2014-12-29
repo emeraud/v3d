@@ -70,7 +70,7 @@ bool Scene3D::getIntersected(const Ray& ray, Vec3Df& intersectionPoint, Vec3Df& 
 }
 
 
-bool Scene3D::isShadow(const Ray& ray, const Object3D* &object) const {
+bool Scene3D::isShadow(const Ray& ray, const Object3D* &object, float sqMaxLength) const {
   Vec3Df tempIntersectionPoint, tempIntersectionNormal;
   for (std::vector<Object3D*>::const_iterator it = _objects.begin(); it != _objects.end(); ++it) {
     if ((*it) == object) {
@@ -78,7 +78,9 @@ bool Scene3D::isShadow(const Ray& ray, const Object3D* &object) const {
       continue;
     }
     if ((*it)->intersect(ray, tempIntersectionPoint, tempIntersectionNormal)) {
-      return true;
+      if (Vec3Df::squaredDistance(tempIntersectionPoint, ray.getOrigin()) < sqMaxLength) {
+        return true;
+      }
     }
   }
   return false;

@@ -20,7 +20,7 @@ class Scene3D {
 
   public:
     bool getIntersected(const Ray& ray, Vec3Df& intersectionPoint, Vec3Df& intersectionNormal, const Object3D* &object) const;
-    bool isShadow(const Ray& ray, const Object3D* &object) const;
+    bool isShadow(const Ray& ray, const Object3D* &object, float sqMaxLength) const;
 
   private:
     std::vector<Object3D*>      _objects;

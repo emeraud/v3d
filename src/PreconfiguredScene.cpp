@@ -80,7 +80,7 @@ void Scene_Primitives::_configure() {
   _animationManager->getScene().addObject(sphere1);
   _animationManager->getScene().addObject(sphere2);
   _animationManager->getScene().addObject(sphere3);
-  _animationManager->setNbFrames(30);
+  _animationManager->setNbFrames(60);
   _activateBench = true;
 }
 
@@ -190,19 +190,28 @@ void Scene_test::_configure() {
 }
 
 void Scene_Room::_configure() {
-  _animationManager->getScene().addLight(Light(Vec3Df(0.f, 0.f, 5.f), Vec3Df(1.f, 1.f, 1.f), 1.f));
+  _animationManager->getScene().addLight(Light(Vec3Df(0.9f, 0.3f, 0.7f), Vec3Df(1.f, 1.f, 1.f), 1.f));
 
   Object3D* plan1 = new PlanObject3D(Vec3Df(0.f, 0.f, 0.f), Vec3Df(0.f, 0.f, 1.f));
-  Object3D* plan2 = new PlanObject3D(Vec3Df(0.f, 1.f, 0.f), Vec3Df(0.f, -1.f, 0.f));
+  Object3D* plan2 = new PlanObject3D(Vec3Df(0.f, 10.f, 0.f), Vec3Df(0.f, -1.f, 0.f));
+  Object3D* plan3 = new PlanObject3D(Vec3Df(10.f, 0.f, 0.f), Vec3Df(-1.f, 0.f, 0.f));
+  Object3D* plan4 = new PlanObject3D(Vec3Df(0.f, -10.f, 0.f), Vec3Df(0.f, 1.f, 0.f));
+  Object3D* plan5 = new PlanObject3D(Vec3Df(-10.f, 0.f, 0.f), Vec3Df(1.f, 0.f, 0.f));
 
   Object3D* sphere1 = new SphereObject3D(Vec3Df(0.0f, 0.0f, 0.5f), 0.5f);
 
   plan1->setMaterial(Material(1.f, 1000.f, Vec3Df (1.f, 0.6f, 0.2f)));
-  plan2->setMaterial(Material(1.f, 1000.f, Vec3Df (0.6f, 0.6f, 0.7f)));
+  plan2->setMaterial(Material(1.f, 1000.f, Vec3Df (1.f, 0.4f, 0.2f)));
+  plan3->setMaterial(Material(1.f, 1000.f, Vec3Df (0.6f, 0.4f, 0.7f)));
+  plan4->setMaterial(Material(1.f, 1000.f, Vec3Df (0.6f, 0.4f, 0.7f)));
+  plan5->setMaterial(Material(1.f, 1000.f, Vec3Df (0.6f, 0.4f, 0.7f)));
   sphere1->setMaterial(Material(0.7f, 1000.f, Vec3Df (0.5f, 0.8f, 0.5f)));
 
   _animationManager->getScene().addObject(plan1);
   _animationManager->getScene().addObject(plan2);
+  _animationManager->getScene().addObject(plan3);
+  _animationManager->getScene().addObject(plan4);
+  _animationManager->getScene().addObject(plan5);
   _animationManager->getScene().addObject(sphere1);
   _animationManager->setNbFrames(30);
   _activateBench = true;

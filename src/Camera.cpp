@@ -1,11 +1,13 @@
 #include "Camera.hpp"
 
+#include "Config.hpp"
+
 Camera::Camera() {
 }
 
 Camera::Camera(Vec3Df pos, Vec3Df dir, Vec3Df up, Vec3Df right) :
   _pos(pos), _dir(dir), _up(up), _right(right),
-  _fieldOfView(1.f), _aspectRatio(1.f) {
+  _fieldOfView(0.80f), _aspectRatio(SCREEN_WIDTH/SCREEN_HEIGHT) {
   _dir.normalize();
   _up.normalize();
   _right.normalize();

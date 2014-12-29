@@ -61,7 +61,7 @@ void AnimationManager::setNbFrames(UInt nbFrames) {
 
 void AnimationManager::move() {
   _t += _invFrames;
-  _camera->setPos(Vec3Df(5.f * cos(_t * 2.f * PI), 5.f * sin(_t * 2.f * PI), 5.f));
+  _camera->setPos(Vec3Df(5.f * cos(_t * 2.f * PI), 5.f * sin(_t * 2.f * PI), 3.f));
   _camera->setDir(-1.f * _camera->getPos());
   _camera->setUp(Vec3Df(0.f, 0.f, 1.f));
   _camera->setRight(Vec3Df::crossProduct(_camera->getDir(), _camera->getUp()));
