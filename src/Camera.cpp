@@ -3,6 +3,12 @@
 #include "Config.hpp"
 
 Camera::Camera() {
+  _pos = Vec3Df(0.f,0.f,0.f);
+  _dir = Vec3Df(0.f,0.f,1.f);
+  _up = Vec3Df(0.f, 0.f, 1.f);
+  _right = Vec3Df(1.f, 0.f, 0.f);
+  _fieldOfView = 0.80f;
+  _aspectRatio = float(SCREEN_WIDTH) / float(SCREEN_HEIGHT);
 }
 
 Camera::Camera(Vec3Df pos, Vec3Df dir, Vec3Df up, Vec3Df right) :

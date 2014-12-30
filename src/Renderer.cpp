@@ -3,8 +3,12 @@
 #include <thread>
 
 #include "Config.hpp"
+
+#include "Scene3D.hpp"
 #include "Object3D.hpp"
 #include "Camera.hpp"
+
+#include "Ray.hpp"
 #include "BRDF.hpp"
 
 Renderer::Renderer(Scene3D* scene, Camera* camera) : _scene(scene), _camera(camera) {

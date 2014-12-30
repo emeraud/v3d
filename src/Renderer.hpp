@@ -1,10 +1,10 @@
 #ifndef RENDERER_HPP
 #define RENDERER_HPP
 
-#include "Scene3D.hpp"
 #include "Types.hpp"
 #include "Vec3D.h"
 
+class Scene3D;
 class Camera;
 
 class Renderer {

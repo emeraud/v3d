@@ -4,21 +4,18 @@
 #include "SDL/SDL.h"
 
 #include "Types.hpp"
-#include "Scene3D.hpp"
-#include "Camera.hpp"
 
 class Viewer;
+class Model;
 class Renderer;
 
 class AnimationManager {
   public:
-    AnimationManager(Viewer* viewer);
+    AnimationManager(Model* model);
     ~AnimationManager();
 
   public:
     void run();
-    Scene3D& getScene();
-    void setNbFrames(UInt nbFrames);
 
   private:
     void move();
@@ -32,14 +29,12 @@ class AnimationManager {
 
   private:
     Viewer*       _viewer;
-    Camera*       _camera;
+    Model*        _model;
     Renderer*     _renderer;
-    Scene3D       _scene;
     bool          _onMove;
     bool          _onExit;
     UInt          _nbFrames;
-    float         _t; // parametric movement
-    float         _invFrames;
+    UInt          _currentFrame;
 };
 
 #endif

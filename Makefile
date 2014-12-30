@@ -9,7 +9,9 @@ SRCDIR=src/
 
 SRCTEMP=Viewer.cpp Triangle.cpp Ray.cpp Tessellation3D.cpp \
 KDTree.cpp Object3D.cpp Connector3D.cpp Scene3D.cpp \
-Camera.cpp Renderer.cpp AnimationManager.cpp PreconfiguredScene.cpp Main.cpp
+Camera.cpp Renderer.cpp AnimationManager.cpp \
+ModelObjectsHelper.cpp ModelScenesHelper.cpp ModelHelper.cpp Model.cpp \
+Main.cpp
 
 OBJTEMP=$(SRCTEMP:.cpp=.o)
 SRC=$(addprefix $(SRCDIR), $(SRCTEMP))
@@ -22,19 +24,25 @@ $(EXEC): $(OBJ)
 
 $(SRCDIR)BRDF.h: $(SRCDIR)Material.hpp $(SRCDIR)Types.hpp
 
-$(OBJDIR)Main.o: $(SRCDIR)PreconfiguredScene.hpp 
+$(OBJDIR)Main.o: $(SRCDIR)Model.hpp $(SRCDIR)ModelHelper.hpp $(SRCDIR)AnimationManager.hpp 
 
-$(OBJDIR)PreconfiguredScene.o: $(SRCDIR)Viewer.hpp $(SRCDIR)AnimationManager.hpp $(SRCDIR)PreconfiguredScene.hpp \
-$(SRCDIR)Scene3D.hpp $(SRCDIR)Renderer.hpp $(SRCDIR)Connector3D.hpp $(SRCDIR)Vec3D.h
+$(OBJDIR)ModelObjectsHelper.o: $(SRCDIR)Tessellation3D.hpp $(SRCDIR)Connector3D.hpp
+
+$(OBJDIR)ModelScenesHelper.o: $(SRCDIR)ModelObjectsHelper.hpp $(SRCDIR)Object3D.hpp $(SRCDIR)Scene3D.hpp $(SRCDIR)Camera.hpp \
+$(SRCDIR)Vec3D.h $(SRCDIR)Material.hpp $(SRCDIR)Light.hpp $(SRCDIR)Types.hpp
+
+$(OBJDIR)ModelHelper.o: $(SRCDIR)ModelHelper.hpp $(SRCDIR)ModelScenesHelper.hpp
+
+$(OBJDIR)Model.o: $(SRCDIR)Scene3D.hpp $(SRCDIR)Camera.hpp $(SRCDIR)Types.hpp
 
 $(OBJDIR)Viewer.o: $(SRCDIR)Config.hpp
 
 $(OBJDIR)Camera.o: $(SRCDIR)Config.hpp
 
-$(OBJDIR)AnimationManager.o: $(SRCDIR)Viewer.hpp $(SRCDIR)Camera.hpp $(SRCDIR)Renderer.hpp $(SRCDIR)Scene3D.hpp
+$(OBJDIR)AnimationManager.o: $(SRCDIR)Viewer.hpp $(SRCDIR)Renderer.hpp $(SRCDIR)Model.hpp
 
 $(OBJDIR)Renderer.o: $(SRCDIR)Camera.hpp $(SRCDIR)Scene3D.hpp $(SRCDIR)Object3D.hpp \
-$(SRCDIR)Ray.hpp $(SRCDIR)BRDF.hpp $(SRCDIR)Config.hpp $(SRCDIR)Types.hpp
+$(SRCDIR)Ray.hpp $(SRCDIR)BRDF.hpp $(SRCDIR)Config.hpp $(SRCDIR)Types.hpp $(SRCDIR)Vec3D.h
 
 $(OBJDIR)Scene3D.o: $(SRCDIR)Object3D.hpp
 

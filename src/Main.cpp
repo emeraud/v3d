@@ -1,32 +1,25 @@
 #include <iostream>
 #include <string>
 #include <map>
+#include <chrono>
 
-#include "PreconfiguredScene.hpp"
+#include "Model.hpp"
+#include "ModelHelper.hpp"
+#include "AnimationManager.hpp"
+
+void play(Model* model);
 
 int main(int argc, char *argv[]) {
-  std::map<std::string,PreconfiguredScene*> availableScenes; 
-  availableScenes["Primitives"] = new Scene_Primitives(); 
-  availableScenes["Ram_5Frames"] = new Scene_Ram_5Frames(); 
-  availableScenes["Bunny_3Frames"] = new Scene_Bunny_3Frames(); 
-  availableScenes["Bunny_10Frames"] = new Scene_Bunny_10Frames(); 
-  availableScenes["Bunny_40Frames"] = new Scene_Bunny_40Frames(); 
-  availableScenes["Monkey_4Frames"] = new Scene_Monkey_4Frames(); 
-  availableScenes["MonkeyAndBunny_40Frames"] = new Scene_MonkeyAndBunny_40Frames(); 
-  availableScenes["Nightclub"] = new Scene_Nightclub(); 
-  availableScenes["Animals"] = new Scene_Animals(); 
-  availableScenes["Animals_2Lights"] = new Scene_Animals_2Lights(); 
-  availableScenes["Room"] = new Scene_Room(); 
-  availableScenes["test"] = new Scene_test(); 
+  std::map<std::string,Model*> availableScenes = ModelHelper::getModels(); 
 
   if (argc == 3) {
     if (std::string(argv[1]).compare("play") == 0) {
       if (availableScenes.count(std::string(argv[2])) == 1) {
-        availableScenes[std::string(argv[2])]->play();
+        play(availableScenes[std::string(argv[2])]);
       } else {
         std::cout << "Scene: '" << argv[2] << "' not found" << std::endl;
         std::cout << "Available scenes:" << std::endl;
-        for (std::map<std::string,PreconfiguredScene*>::iterator it=availableScenes.begin();
+        for (std::map<std::string,Model*>::iterator it=availableScenes.begin();
               it != availableScenes.end(); ++it) {
           std::cout << "... " << it->first << std::endl;
         }
@@ -36,13 +29,13 @@ int main(int argc, char *argv[]) {
     }
   } else if (argc == 2) {
     if (std::string(argv[1]).compare("bench") == 0) {
-      for(std::map<std::string,PreconfiguredScene*>::const_iterator it = availableScenes.begin(); it!=availableScenes.end(); ++it) {
+      for(std::map<std::string,Model*>::const_iterator it = availableScenes.begin(); it!=availableScenes.end(); ++it) {
         std::cout << "Playing scene '" << it->first << "'" << std::endl;
-        it->second->play();
+        play(it->second);
       }
     } else if (std::string(argv[1]).compare("play") == 0) {
       std::cout << "Available scenes:" << std::endl;
-      for (std::map<std::string,PreconfiguredScene*>::iterator it=availableScenes.begin();
+      for (std::map<std::string,Model*>::iterator it=availableScenes.begin();
             it != availableScenes.end(); ++it) {
         std::cout << "... " << it->first << std::endl;
       }
@@ -53,14 +46,27 @@ int main(int argc, char *argv[]) {
       std::cout << "... play" << std::endl;
     }
   } else {
-    availableScenes["Ram_5Frames"]->play(); 
+    play(availableScenes["Ram_5Frames"]); 
   }
 
-  for(std::map<std::string,PreconfiguredScene*>::const_iterator it = availableScenes.begin(); it!=availableScenes.end(); ++it) {
-    //std::cout << "Releasing scene '" << it->first << "'" << std::endl;
+  for(std::map<std::string,Model*>::const_iterator it = availableScenes.begin(); it!=availableScenes.end(); ++it) {
     delete it->second;
   }
 
   return EXIT_SUCCESS;
 }
 
+void play(Model* model) {
+  AnimationManager* animationManager = new AnimationManager(model); 
+  if (model->isBenchActivated()) {
+    std::cout << "Now running" << std::endl;
+    auto start = std::chrono::system_clock::now();
+    animationManager->run();
+    auto end = std::chrono::system_clock::now();
+    auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+    std::cout << elapsed.count() << " ms" << std::endl;
+  } else {
+    animationManager->run();
+  }
+  delete animationManager;
+}

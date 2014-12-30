@@ -7,27 +7,20 @@
 #include <math.h>
 
 #include "Viewer.hpp"
+#include "Model.hpp"
 #include "Renderer.hpp"
-#include "Camera.hpp"
 
-#define PI 3.14159f
-
-AnimationManager::AnimationManager(Viewer* viewer) : _viewer(viewer), _onMove(true), _onExit(false) {
-  Vec3Df pos(3.f,3.f,2.f);
-  Vec3Df dir = -1.f * pos;
-  Vec3Df up(0.f, 0.f, 1.f);
-  Vec3Df right(1.f, 0.f, 0.f);
-  _camera = new Camera(pos, dir, up, right);
-  _renderer = new Renderer(&_scene, _camera);
-  _nbFrames = UINT_MAX;
-  _t = 0.f;
-  _invFrames = 0.f;
+AnimationManager::AnimationManager(Model* model) : _model(model), _onMove(true), _onExit(false) {
+  _viewer = new Viewer();
+  _renderer = new Renderer(_model->getScene(), _model->getCamera());
+  _nbFrames = _model->getNbFrames();
+  _currentFrame = 0;
 }
 
 
 AnimationManager::~AnimationManager() {
   delete _renderer;
-  delete _camera;
+  delete _viewer;
 }
 
 void AnimationManager::run() {
@@ -49,24 +42,10 @@ void AnimationManager::run() {
   }
 }
 
-Scene3D& AnimationManager::getScene() {
-  return _scene;
-}
-void AnimationManager::setNbFrames(UInt nbFrames) {
-  _nbFrames = nbFrames;
-  if (nbFrames > 0) {
-    _invFrames = 1.f / ((float) nbFrames);
-  }
-}
-
 void AnimationManager::move() {
-  _t += _invFrames;
-  _camera->setPos(Vec3Df(5.f * cos(_t * 2.f * PI), 5.f * sin(_t * 2.f * PI), 3.f));
-  _camera->setDir(-1.f * _camera->getPos());
-  _camera->setUp(Vec3Df(0.f, 0.f, 1.f));
-  _camera->setRight(Vec3Df::crossProduct(_camera->getDir(), _camera->getUp()));
-  _nbFrames--;
-  if (_nbFrames == 0) {
+  _model->updateToFrame(_currentFrame); 
+  _currentFrame++;
+  if (_currentFrame > _nbFrames) {
     _onExit = true;
   }
 }

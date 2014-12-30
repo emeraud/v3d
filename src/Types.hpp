@@ -12,5 +12,7 @@ struct Pixel {
 typedef unsigned int UInt;
 
 #define EPSILON 0.000001f
+#define PI 3.14159f
+
 
 #endif
