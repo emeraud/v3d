@@ -22,6 +22,7 @@ class Model {
  
   protected:
     virtual void _configure() = 0;
+    virtual void _move(float t);
 
   protected:
     Scene3D*            _scene;

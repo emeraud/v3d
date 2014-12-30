@@ -2,6 +2,7 @@
 
 #include "Object3D.hpp"
 #include "Scene3D.hpp"
+#include "Camera.hpp"
 
 #include "Light.hpp"
 #include "Material.hpp"
@@ -102,6 +103,14 @@ void Scene_Animals::_configure() {
   _nbFrames = 40;
   _activateBench = true;
 }
+
+void Scene_Animals::_move(float t) {
+  _camera->setPos(Vec3Df(5.f * cos(t * 2.f * PI), 5.f * sin(t * 2.f * PI), 7.f - 6.f*t));
+  _camera->setDir(-1.f * _camera->getPos());
+  _camera->setUp(Vec3Df(0.f, 0.f, 1.f));
+  _camera->setRight(Vec3Df::crossProduct(_camera->getDir(), _camera->getUp()));
+}
+
 
 void Scene_Animals_2Lights::_configure() {
   _scene->addLight(Light(Vec3Df(3.f, 3.f, 3.f), Vec3Df(0.59f, 0.25f, 0.4f), 1.0f));

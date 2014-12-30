@@ -28,7 +28,8 @@ $(OBJDIR)Main.o: $(SRCDIR)Model.hpp $(SRCDIR)ModelHelper.hpp $(SRCDIR)AnimationM
 
 $(OBJDIR)ModelObjectsHelper.o: $(SRCDIR)Tessellation3D.hpp $(SRCDIR)Connector3D.hpp
 
-$(OBJDIR)ModelScenesHelper.o: $(SRCDIR)ModelObjectsHelper.hpp $(SRCDIR)Object3D.hpp $(SRCDIR)Scene3D.hpp $(SRCDIR)Camera.hpp \
+$(OBJDIR)ModelScenesHelper.o: $(SRCDIR)Model.hpp $(SRCDIR)ModelObjectsHelper.hpp \
+$(SRCDIR)Object3D.hpp $(SRCDIR)Scene3D.hpp $(SRCDIR)Camera.hpp \
 $(SRCDIR)Vec3D.h $(SRCDIR)Material.hpp $(SRCDIR)Light.hpp $(SRCDIR)Types.hpp
 
 $(OBJDIR)ModelHelper.o: $(SRCDIR)ModelHelper.hpp $(SRCDIR)ModelScenesHelper.hpp

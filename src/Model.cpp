@@ -32,7 +32,13 @@ UInt Model::getNbFrames() {
 }
 
 void Model::updateToFrame(UInt frame) {
-  float t = float(frame) / float(_nbFrames);
+  if (_nbFrames > 0) {
+    float t = float(frame) / float(_nbFrames);
+    _move(t);
+  }
+}
+
+void Model::_move(float t) {
   _camera->setPos(Vec3Df(5.f * cos(t * 2.f * PI), 5.f * sin(t * 2.f * PI), 3.f));
   _camera->setDir(-1.f * _camera->getPos());
   _camera->setUp(Vec3Df(0.f, 0.f, 1.f));

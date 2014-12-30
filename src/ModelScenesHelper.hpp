@@ -46,6 +46,7 @@ class Scene_Nightclub : public Model {
 class Scene_Animals : public Model {
   protected:
     virtual void _configure();
+    virtual void _move(float t);
 };
 
 class Scene_Animals_2Lights : public Model {
