@@ -37,6 +37,10 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <cmath>
 #include <iostream>
 
+#ifndef M_PI
+#define M_PI 3.14159
+#endif
+
 
 template<typename T> class Vec3D;
 

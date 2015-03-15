@@ -1,7 +1,5 @@
 #include "AnimationManager.hpp"
 
-#include "SDL/SDL.h"
-
 #include <iostream>
 #include <climits>
 #include <math.h>
@@ -43,7 +41,7 @@ void AnimationManager::run() {
 }
 
 void AnimationManager::move() {
-  _model->updateToFrame(_currentFrame); 
+  _model->updateToFrame(_currentFrame);
   _currentFrame++;
   if (_currentFrame > _nbFrames) {
     _onExit = true;

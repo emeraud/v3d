@@ -13,6 +13,7 @@ class ModelObjectsHelper {
     static Tessellation3D* getRhino();
     static Tessellation3D* getGargoyle();
     static Tessellation3D* getGround();
+	static Tessellation3D* getTeapot();
 
     static Tessellation3D* buildTessellation(std::string path);
 };

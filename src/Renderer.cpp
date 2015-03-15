@@ -1,6 +1,8 @@
 #include "Renderer.hpp"
 
+#ifdef NB_THREADS
 #include <thread>
+#endif
 
 #include "Config.hpp"
 
@@ -47,6 +49,7 @@ Pixel** Renderer::render() {
   computeConstants();
 
 #ifdef NB_THREADS
+
   std::thread threads[NB_THREADS];
   int nbBlocks = SCREEN_WIDTH / NB_THREADS;
   int currentLine = 0;
@@ -65,6 +68,7 @@ Pixel** Renderer::render() {
       }
     }
   }
+ 
 #else
   for (int i=0; i<SCREEN_WIDTH; i++) {
     for (int j=0; j<SCREEN_HEIGHT; j++) {
@@ -138,7 +142,7 @@ void Renderer::renderPixel(int x, int y) {
     BRDF::getColor(_camera->getPos(), intersectionPoint, intersectionNormal, object->getMaterial(), _scene->getLights(), c);
 #endif
   }
-  
+
   _pixelGrid[x][y].r = c[0];
   _pixelGrid[x][y].g = c[1];
   _pixelGrid[x][y].b = c[2];

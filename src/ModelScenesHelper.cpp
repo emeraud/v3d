@@ -136,9 +136,7 @@ void Scene_Animals_2Lights::_configure() {
 void Scene_test::_configure() {
 //  _scene->addLight(Light(Vec3Df(3.f, 3.f, 3.f), Vec3Df(1.f, 1.f, 1.f), 1.0f));
   _scene->addLight(Light(Vec3Df(-2.1f, 0.0f, 1.5f), Vec3Df(1.f, 1.f, 1.f), 1.0f));
-  _scene->addObject(new MeshObject3D(ModelObjectsHelper::getBunny(), Vec3Df(0.f, 0.f, 0.9f)));
-  _scene->addObject(new MeshObject3D(ModelObjectsHelper::getRam(), Vec3Df(1.f, 0.5f, 0.9f)));
-  _scene->addObject(new MeshObject3D(ModelObjectsHelper::getGround(), Vec3Df(1.f,0.5f,0.f)));
+  _scene->addObject(new MeshObject3D(ModelObjectsHelper::getTeapot(), Vec3Df(0.f, 0.f, 0.9f)));
   _nbFrames = 40;
   _activateBench = true;
 }

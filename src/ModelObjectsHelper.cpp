@@ -5,7 +5,14 @@
 
 
 Tessellation3D* ModelObjectsHelper::buildTessellation(std::string path) {
-  return Connector3D::parseFile(path.c_str());
+  Tessellation3D* tessellation = Connector3D::parseFile(path.c_str());
+  if (tessellation == 0x0) {
+	  std::cout << "A problem occurred when reading file: " << path << std::endl;
+	  std::cout << "Interrupting program" << std::endl;
+	  exit(0);
+	  return 0x0;
+  }
+  return tessellation;
 }
 
 Tessellation3D* ModelObjectsHelper::getRam() {
@@ -30,5 +37,9 @@ Tessellation3D* ModelObjectsHelper::getGargoyle() {
 
 Tessellation3D* ModelObjectsHelper::getGround() {
   return buildTessellation("/home/val/Documents/dev/v3d/models/ground.off");
+}
+
+Tessellation3D* ModelObjectsHelper::getTeapot() {
+  return buildTessellation("e:\\dev\\v3d\\models\\ram.off");
 }
 

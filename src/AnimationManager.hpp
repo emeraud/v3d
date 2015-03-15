@@ -1,7 +1,7 @@
 #ifndef ANIMATIONMANAGER_HPP
 #define ANIMATIONMANAGER_HPP
 
-#include "SDL/SDL.h"
+#include "SDL.h"
 
 #include "Types.hpp"
 
