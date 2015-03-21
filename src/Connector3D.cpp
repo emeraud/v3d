@@ -8,6 +8,10 @@
 
 Tessellation3D* Connector3D::parseFile(const std::string& fileName) {
   std::ifstream file(fileName.c_str(), std::ios::binary);
+  if (!file.is_open() || !file.good()) {
+	  return 0x0;
+  }
+
   file.seekg(0, std::ios::end);
   std::streamsize size = file.tellg();
   file.seekg(0, std::ios::beg);

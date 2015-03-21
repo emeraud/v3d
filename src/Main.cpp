@@ -7,6 +7,9 @@
 #include "ModelHelper.hpp"
 #include "AnimationManager.hpp"
 
+
+#undef main // SDL...
+
 void play(Model* model);
 
 int main(int argc, char *argv[]) {
@@ -46,7 +49,7 @@ int main(int argc, char *argv[]) {
       std::cout << "... play" << std::endl;
     }
   } else {
-    play(availableScenes["Ram_5Frames"]); 
+    play(availableScenes["test"]); 
   }
 
   for(std::map<std::string,Model*>::const_iterator it = availableScenes.begin(); it!=availableScenes.end(); ++it) {

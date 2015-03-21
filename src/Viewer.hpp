@@ -4,7 +4,7 @@
 #include "Config.hpp"
 #include "Types.hpp"
 
-class SDL_Surface;
+struct SDL_Surface;
 
 class Viewer {
 public:

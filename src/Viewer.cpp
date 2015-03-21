@@ -1,6 +1,6 @@
 #include "Viewer.hpp"
 
-#include <SDL/SDL.h>
+#include <SDL.h>
 
 #include "Config.hpp"
 

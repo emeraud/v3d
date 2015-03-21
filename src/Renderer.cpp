@@ -1,6 +1,5 @@
 #include "Renderer.hpp"
 
-
 #include "Config.hpp"
 
 #include "Scene3D.hpp"
