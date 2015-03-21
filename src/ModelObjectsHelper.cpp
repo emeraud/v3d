@@ -9,7 +9,6 @@ Tessellation3D* ModelObjectsHelper::buildTessellation(std::string path) {
   if (tessellation == 0x0) {
 	  std::cout << "A problem occurred when reading file: " << path << std::endl;
 	  std::cout << "Interrupting program" << std::endl;
-	  exit(0);
 	  return 0x0;
   }
   return tessellation;
