@@ -14,8 +14,6 @@ Model::~Model() {
 }
 
 Scene3D* Model::getScene() {
-  _configure();
-  _scene->prepare();
   return _scene;
 }
 
@@ -29,6 +27,11 @@ bool Model::isBenchActivated() {
 
 UInt Model::getNbFrames() {
   return _nbFrames;
+}
+
+void Model::prepare() {
+  _configure();
+  _scene->prepare();
 }
 
 void Model::updateToFrame(UInt frame) {

@@ -8,18 +8,15 @@
 
 #include "Viewer.hpp"
 #include "Model.hpp"
-#include "Renderer.hpp"
 
-AnimationManager::AnimationManager(Model* model) : _model(model), _onMove(true), _onExit(false) {
+AnimationManager::AnimationManager(Model* model) : _model(model), _renderingPipeline(model), _onMove(true), _onExit(false) {
   _viewer = new Viewer();
-  _renderer = new Renderer(_model->getScene(), _model->getCamera());
   _nbFrames = _model->getNbFrames();
   _currentFrame = 0;
 }
 
 
 AnimationManager::~AnimationManager() {
-  delete _renderer;
   delete _viewer;
 }
 
@@ -52,7 +49,7 @@ void AnimationManager::move() {
 
 Pixel** AnimationManager::getNextImage() {
   move();
-  return _renderer->render();
+  return _renderingPipeline.render();
 }
 
 void AnimationManager::waitEvents() {

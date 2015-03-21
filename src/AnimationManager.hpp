@@ -4,10 +4,10 @@
 #include "SDL/SDL.h"
 
 #include "Types.hpp"
+#include "RenderingPipeline.hpp"
 
 class Viewer;
 class Model;
-class Renderer;
 
 class AnimationManager {
   public:
@@ -28,9 +28,11 @@ class AnimationManager {
     void handleKeyDownEvent(int key);
 
   private:
-    Viewer*       _viewer;
-    Model*        _model;
-    Renderer*     _renderer;
+    Viewer*            _viewer;
+    Model*             _model;
+    RenderingPipeline  _renderingPipeline;
+
+  private:
     bool          _onMove;
     bool          _onExit;
     UInt          _nbFrames;

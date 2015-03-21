@@ -1,6 +1,5 @@
 #include "Renderer.hpp"
 
-#include <thread>
 
 #include "Config.hpp"
 
@@ -12,22 +11,10 @@
 #include "BRDF.hpp"
 
 Renderer::Renderer(Scene3D* scene, Camera* camera) : _scene(scene), _camera(camera) {
-  _pixelGrid = new Pixel*[SCREEN_WIDTH];
-  for (int i=0; i<SCREEN_WIDTH; i++) {
-    _pixelGrid[i] = new Pixel[SCREEN_HEIGHT];
-    for (int j=0; j<SCREEN_HEIGHT; j++) {
-      _pixelGrid[i][j].r = 0;
-      _pixelGrid[i][j].g = 0;
-      _pixelGrid[i][j].b = 0;
-    }
-  }
+  std::cout << "Creating renderer" << std::endl;
 }
 
 Renderer::~Renderer() {
-  for (int i=0; i<SCREEN_WIDTH; i++) {
-    delete[] _pixelGrid[i];
-  }
-  delete[] _pixelGrid;
 }
 
 void Renderer::computeConstants() {
@@ -43,49 +30,8 @@ void Renderer::computeConstants() {
   _stepY = 1.f/float(SCREEN_HEIGHT) * yVec;
 }
 
-Pixel** Renderer::render() {
-  computeConstants();
-
-#ifdef NB_THREADS
-  std::thread threads[NB_THREADS];
-  int nbBlocks = SCREEN_WIDTH / NB_THREADS;
-  int currentLine = 0;
-
-  for (int k=0; k<nbBlocks; k++) {
-    for (int i=0; i<NB_THREADS; i++) {
-      if (currentLine < SCREEN_WIDTH) {
-        threads[i] = std::thread(&Renderer::renderLine, this, currentLine);
-        currentLine++;
-      }
-    }
-
-    for (int i=0; i<NB_THREADS; i++) {
-      if (currentLine - (NB_THREADS - i) < SCREEN_WIDTH) {
-        threads[i].join();
-      }
-    }
-  }
-#else
-  for (int i=0; i<SCREEN_WIDTH; i++) {
-    for (int j=0; j<SCREEN_HEIGHT; j++) {
-      renderPixel(i, j);
-    }
-  }
-#endif
-
-  return _pixelGrid;
-}
-
-void Renderer::renderLine(int x) {
-  for (int j=0; j<SCREEN_HEIGHT; j++) {
-    renderPixel(x, j);
-    _pixelGrid[x][j].r = _pixelGrid[x][j].r > 255.f ? 255.f : _pixelGrid[x][j].r < 0.f ? 0.f : _pixelGrid[x][j].r;
-    _pixelGrid[x][j].g = _pixelGrid[x][j].g > 255.f ? 255.f : _pixelGrid[x][j].g < 0.f ? 0.f : _pixelGrid[x][j].g;
-    _pixelGrid[x][j].b = _pixelGrid[x][j].b > 255.f ? 255.f : _pixelGrid[x][j].b < 0.f ? 0.f : _pixelGrid[x][j].b;
-  }
-}
-
-void Renderer::renderPixel(int x, int y) {
+void Renderer::renderPixel(int x, int y, Pixel& pixel) {
+  computeConstants(); // move to a global context
   /* we aim:
     Vec3Df stepX = (float(i) - 0.5f * float(SCREEN_WIDTH))/float(SCREEN_WIDTH) * obsRight;
     Vec3Df stepY = (float(j) - 0.5f * float(SCREEN_HEIGHT))/float(SCREEN_HEIGHT) * obsUp;
@@ -109,9 +55,9 @@ void Renderer::renderPixel(int x, int y) {
     Light light = _scene->getLights()[i];
     Vec3Df intersectionPoint, intersectionNormal;
     if (ray.intersect(light.getPos(), 0.01f, intersectionPoint, intersectionNormal)) {
-      _pixelGrid[x][y].r = 50;
-      _pixelGrid[x][y].g = 0;
-      _pixelGrid[x][y].b = 0;
+      pixel.r = 50;
+      pixel.g = 0;
+      pixel.b = 0;
       return;
     }
   }
@@ -139,7 +85,17 @@ void Renderer::renderPixel(int x, int y) {
 #endif
   }
   
-  _pixelGrid[x][y].r = c[0];
-  _pixelGrid[x][y].g = c[1];
-  _pixelGrid[x][y].b = c[2];
+  pixel.r = c[0];
+  pixel.g = c[1];
+  pixel.b = c[2];
+}
+
+void Renderer::renderLine(int x, Pixel** pixelGrid) {
+  for (int j=0; j<SCREEN_HEIGHT; j++) {
+    Pixel& pixel = pixelGrid[x][j];
+    renderPixel(x, j, pixel);
+    pixel.r = pixel.r > 255.f ? 255.f : pixel.r < 0.f ? 0.f : pixel.r;
+    pixel.g = pixel.g > 255.f ? 255.f : pixel.g < 0.f ? 0.f : pixel.g;
+    pixel.b = pixel.b > 255.f ? 255.f : pixel.b < 0.f ? 0.f : pixel.b;
+  }
 }

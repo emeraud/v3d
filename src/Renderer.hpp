@@ -7,23 +7,22 @@
 class Scene3D;
 class Camera;
 
+/* Thread safe rendering class */
 class Renderer {
   public:
     Renderer(Scene3D* scene, Camera* camera);
     ~Renderer();
 
   public:
-    Pixel** render();
+    void renderPixel(int x, int y, Pixel& pixel);
+    void renderLine(int x, Pixel** pixelGrid);
 
   private:
     void computeConstants();
-    void renderLine(int x);
-    void renderPixel(int x, int y);
 
   private:
     Scene3D*    _scene;
     Camera*     _camera;
-    Pixel**     _pixelGrid;
     Vec3Df      _defaultColor;
 
   private:

@@ -57,6 +57,7 @@ int main(int argc, char *argv[]) {
 }
 
 void play(Model* model) {
+  model->prepare();
   AnimationManager* animationManager = new AnimationManager(model); 
   if (model->isBenchActivated()) {
     std::cout << "Now running" << std::endl;

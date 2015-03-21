@@ -16,6 +16,7 @@ class Model {
     Camera* getCamera();
     bool isBenchActivated();
     UInt getNbFrames();
+    void prepare();
 
   public:
     void updateToFrame(UInt frame);

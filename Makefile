@@ -9,7 +9,7 @@ SRCDIR=src/
 
 SRCTEMP=Viewer.cpp Triangle.cpp Ray.cpp Tessellation3D.cpp \
 KDTree.cpp Object3D.cpp Connector3D.cpp Scene3D.cpp \
-Camera.cpp Renderer.cpp AnimationManager.cpp \
+Camera.cpp RenderingPipeline.cpp Renderer.cpp AnimationManager.cpp \
 ModelObjectsHelper.cpp ModelScenesHelper.cpp ModelHelper.cpp Model.cpp \
 Main.cpp
 
@@ -40,7 +40,10 @@ $(OBJDIR)Viewer.o: $(SRCDIR)Config.hpp
 
 $(OBJDIR)Camera.o: $(SRCDIR)Config.hpp
 
-$(OBJDIR)AnimationManager.o: $(SRCDIR)Viewer.hpp $(SRCDIR)Renderer.hpp $(SRCDIR)Model.hpp
+$(OBJDIR)AnimationManager.o: $(SRCDIR)Viewer.hpp $(SRCDIR)RenderingPipeline.hpp $(SRCDIR)Model.hpp
+
+$(OBJDIR)RenderingPipeline.o: $(SRCDIR)Scene3D.hpp $(SRCDIR)Model.hpp \
+$(SRCDIR)Renderer.hpp $(SRCDIR)Types.hpp
 
 $(OBJDIR)Renderer.o: $(SRCDIR)Camera.hpp $(SRCDIR)Scene3D.hpp $(SRCDIR)Object3D.hpp \
 $(SRCDIR)Ray.hpp $(SRCDIR)BRDF.hpp $(SRCDIR)Config.hpp $(SRCDIR)Types.hpp $(SRCDIR)Vec3D.h
