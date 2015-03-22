@@ -23,13 +23,14 @@ void KDTree::build() {
   std::cout << "KDTree built" << std::endl;
 }
 
-bool KDTree::getSortedIntersectedLeaves(const Ray& ray, std::vector<IntersectedNode>& nodes) const {
-  _root->getIntersectedChildren(ray, nodes, 0);
-  if (nodes.size() == 0) {
+bool KDTree::getSortedIntersectedLeaves(const Ray& ray, std::vector<IntersectedNode>& nodes, UInt& nbNodes) const {
+  nbNodes = 0;
+  _root->getIntersectedChildren(ray, nodes, nbNodes, 0);
+  if (nbNodes == 0) {
     return false;
   }
-  
-  std::sort(nodes.begin(), nodes.end(), IntersectedNodeSorter());
+
+  std::sort(nodes.begin(), nodes.begin() + nbNodes, IntersectedNodeSorter());
   return true;
 }
 
@@ -163,19 +164,25 @@ BoundingBox Node::computeChildBox(const Tessellation3D* tessellation, const std:
   return box;
 }
 
-void Node::getIntersectedChildren(const Ray& ray, std::vector<IntersectedNode>& nodes, const int depth) const {
+void Node::getIntersectedChildren(const Ray& ray, std::vector<IntersectedNode>& nodes, UInt& nbNodes, const int depth) const {
   Vec3Df intersectionPoint;
   if (ray.intersect(_bbox)) {
     if (_triangles.size() > 0) {
       if (ray.intersect(_bbox, intersectionPoint)) {
-        nodes.push_back(IntersectedNode(this, Vec3Df::squaredDistance(ray.getOrigin(), intersectionPoint)));
+        if (nbNodes >= nodes.size()) {
+          nodes.push_back(IntersectedNode(this, Vec3Df::squaredDistance(ray.getOrigin(), intersectionPoint)));
+        } else {
+          nodes[nbNodes].node = this;
+          nodes[nbNodes].sqDist = Vec3Df::squaredDistance(ray.getOrigin(), intersectionPoint);
+        }
+        nbNodes++;
       }
     } else {
       if (_lNode != 0x0) {
-        _lNode->getIntersectedChildren(ray, nodes, depth+1);
+        _lNode->getIntersectedChildren(ray, nodes, nbNodes, depth+1);
       }
       if (_rNode != 0x0) {
-        _rNode->getIntersectedChildren(ray, nodes, depth+1);
+        _rNode->getIntersectedChildren(ray, nodes, nbNodes, depth+1);
       }
     }
   }

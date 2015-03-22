@@ -3,6 +3,7 @@
 
 #include "Types.hpp"
 #include "Vec3D.h"
+#include "InterContext.hpp"
 
 class Scene3D;
 class Camera;
@@ -24,6 +25,11 @@ class Renderer {
     Scene3D*    _scene;
     Camera*     _camera;
     Vec3Df      _defaultColor;
+
+    bool renderByBlock;
+
+  private:
+    InterContext  _interContext;
 
   private:
     Vec3Df      _startX;

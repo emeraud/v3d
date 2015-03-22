@@ -28,7 +28,7 @@ class KDTree {
     ~KDTree();
 
   public:
-    bool getSortedIntersectedLeaves(const Ray& ray, std::vector<IntersectedNode>& nodes) const;
+    bool getSortedIntersectedLeaves(const Ray& ray, std::vector<IntersectedNode>& nodes, UInt& nbNodes) const;
 
   private:
     void build();
@@ -50,7 +50,7 @@ class Node {
     const std::vector<UInt>& getTriangles() const;
 
   private:
-    void getIntersectedChildren(const Ray& ray, std::vector<IntersectedNode>& nodes, const int depth) const;
+    void getIntersectedChildren(const Ray& ray, std::vector<IntersectedNode>& nodes, UInt& nbNodes, const int depth) const;
 
   private:
     void build(const Tessellation3D* tessellation, const std::vector<UInt>& triangles, const int depth);

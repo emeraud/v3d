@@ -10,7 +10,7 @@
 #include "BRDF.hpp"
 
 Renderer::Renderer(Scene3D* scene, Camera* camera) : _scene(scene), _camera(camera) {
-  std::cout << "Creating renderer" << std::endl;
+  renderByBlock = false;
 }
 
 Renderer::~Renderer() {
@@ -30,30 +30,29 @@ void Renderer::computeConstants() {
 }
 
 void Renderer::renderPixel(int x, int y, Pixel& pixel) {
-  computeConstants(); // move to a global context
+  if (!renderByBlock) {
+    computeConstants(); // move to a global context
+  }
   /* we aim:
     Vec3Df stepX = (float(i) - 0.5f * float(SCREEN_WIDTH))/float(SCREEN_WIDTH) * obsRight;
     Vec3Df stepY = (float(j) - 0.5f * float(SCREEN_HEIGHT))/float(SCREEN_HEIGHT) * obsUp;
     Ray ray(obsPos, obsDir + stepX + stepY);
   */
 
-  Vec3Df intersectionPoint;
-  Vec3Df intersectionNormal;
   Vec3Df c = _defaultColor;
-  const Object3D* object = 0x0;
 
   Vec3Df xOffset = _startX + float(x) * _stepX;
   Vec3Df yOffset = _startY + float(y) * _stepY;
   Vec3Df camDir = _camera->getDir() + xOffset + yOffset;
   camDir.normalize();
-  Ray ray(_camera->getPos(), camDir);
+  _interContext.ray = Ray(_camera->getPos(), camDir);
 
 #ifdef DISPLAY_LIGHTS_SOURCES
   // Display light sources as a sphere
   for (UInt i=0; i<_scene->getLights().size(); i++) {
     Light light = _scene->getLights()[i];
     Vec3Df intersectionPoint, intersectionNormal;
-    if (ray.intersect(light.getPos(), 0.01f, intersectionPoint, intersectionNormal)) {
+    if (_interContext.ray.intersect(light.getPos(), 0.01f, intersectionPoint, intersectionNormal)) {
       pixel.r = 50;
       pixel.g = 0;
       pixel.b = 0;
@@ -64,23 +63,23 @@ void Renderer::renderPixel(int x, int y, Pixel& pixel) {
 
 
 
-  if (_scene->getIntersected(ray, intersectionPoint, intersectionNormal, object)) {
+  if (_scene->getIntersected(_interContext)) {
 #ifdef ENABLE_SHADOW
     std::vector<Light> keptLights;
     for (UInt i=0; i<_scene->getLights().size(); i++) {
-      Vec3Df dirToLight = _scene->getLights()[i].getPos() - intersectionPoint;
+      Vec3Df dirToLight = _scene->getLights()[i].getPos() - _interContext.point;
       float sqMaxLength = dirToLight.getSquaredLength();
       dirToLight.normalize();
-      Ray rayToLight(intersectionPoint + EPSILON * dirToLight, dirToLight);
-      if (!_scene->isShadow(rayToLight, object, sqMaxLength)) {
+      _interContext.ray = Ray(_interContext.point + EPSILON * dirToLight, dirToLight);
+      if (!_scene->isShadow(_interContext, sqMaxLength)) {
         keptLights.push_back(_scene->getLights()[i]);
       }
     }
     if (keptLights.size() > 0) {
-      BRDF::getColor(_camera->getPos(), intersectionPoint, intersectionNormal, object->getMaterial(), keptLights, c);
+      BRDF::getColor(_camera->getPos(), _interContext.point, _interContext.normal, _interContext.object->getMaterial(), keptLights, c);
     }
 #else
-    BRDF::getColor(_camera->getPos(), intersectionPoint, intersectionNormal, object->getMaterial(), _scene->getLights(), c);
+    BRDF::getColor(_camera->getPos(), _interContext.point, _interContext.normal, _interContext.object->getMaterial(), _scene->getLights(), c);
 #endif
   }
   
@@ -90,6 +89,8 @@ void Renderer::renderPixel(int x, int y, Pixel& pixel) {
 }
 
 void Renderer::renderLine(int x, Pixel** pixelGrid) {
+  renderByBlock = true;
+  computeConstants();
   for (int j=0; j<SCREEN_HEIGHT; j++) {
     Pixel& pixel = pixelGrid[x][j];
     renderPixel(x, j, pixel);
@@ -97,4 +98,5 @@ void Renderer::renderLine(int x, Pixel** pixelGrid) {
     pixel.g = pixel.g > 255.f ? 255.f : pixel.g < 0.f ? 0.f : pixel.g;
     pixel.b = pixel.b > 255.f ? 255.f : pixel.b < 0.f ? 0.f : pixel.b;
   }
+  renderByBlock = false;
 }

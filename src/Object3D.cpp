@@ -39,9 +39,8 @@ void MeshObject3D::init() {
   _kdTree = new KDTree(_tessellation);
 }
 
-bool MeshObject3D::intersect(const Ray& ray, Vec3Df& intersectionPoint, Vec3Df& intersectionNormal) const {
-  std::vector<IntersectedNode> nodes;
-  if (!_kdTree->getSortedIntersectedLeaves(ray, nodes)) {
+bool MeshObject3D::intersect(InterContext& interContext) const {
+  if (!_kdTree->getSortedIntersectedLeaves(interContext.ray, interContext.nodes, interContext.nbNodes)) {
     return false;
   }
 
@@ -54,8 +53,9 @@ bool MeshObject3D::intersect(const Ray& ray, Vec3Df& intersectionPoint, Vec3Df& 
   float uI = 0.f, vI = 0.f;
   float minDist = FLT_MAX;
   float sqMinDist = FLT_MAX;
+  UInt nodeId = 0;
 
-  for (std::vector<IntersectedNode>::const_iterator nIt = nodes.begin(); nIt != nodes.end(); ++nIt) {
+  for (std::vector<IntersectedNode>::const_iterator nIt = interContext.nodes.begin(); nodeId < interContext.nbNodes && nIt != interContext.nodes.end(); ++nIt) {
     if (nIt->sqDist > sqMinDist) {
       // all points of the box are worst than the intersected point
       // since the IntersectedNode list is sorted, we can stop
@@ -65,7 +65,7 @@ bool MeshObject3D::intersect(const Ray& ray, Vec3Df& intersectionPoint, Vec3Df& 
     const std::vector<UInt>& triangles = nIt->node->getTriangles();
     for (UInt i=0; i<triangles.size(); i++) {
       intersectedTriangle = _tessellation->getTriangleVertices(triangles[i]);
-      if (ray.intersect(intersectedTriangle.v0->pos, intersectedTriangle.v1->pos, intersectedTriangle.v2->pos, t, u, v)) {
+      if (interContext.ray.intersect(intersectedTriangle.v0->pos, intersectedTriangle.v1->pos, intersectedTriangle.v2->pos, t, u, v)) {
         if (t < minDist) {
           minDist = t;
           sqMinDist = minDist * minDist;
@@ -75,12 +75,13 @@ bool MeshObject3D::intersect(const Ray& ray, Vec3Df& intersectionPoint, Vec3Df& 
         }
       }
     }
+    nodeId++;
   }
 
   if (minDist != FLT_MAX) {
-    intersectionPoint = ray.getOrigin() + minDist * ray.getDirection();
-    intersectionNormal = (1.f - uI -vI) * bestTriangle.v0->normal + uI * bestTriangle.v1->normal + vI * bestTriangle.v2->normal;
-    intersectionNormal.normalize();
+    interContext.tmpPoint = interContext.ray.getOrigin() + minDist * interContext.ray.getDirection();
+    interContext.tmpNormal = (1.f - uI -vI) * bestTriangle.v0->normal + uI * bestTriangle.v1->normal + vI * bestTriangle.v2->normal;
+    interContext.tmpNormal.normalize();
     return true;
   }
 
@@ -96,8 +97,8 @@ SphereObject3D::~SphereObject3D() {
 
 }
 
-bool SphereObject3D::intersect(const Ray& ray, Vec3Df& intersectionPoint, Vec3Df& intersectionNormal) const {
-  return ray.intersect(_center, _radius, intersectionPoint, intersectionNormal);
+bool SphereObject3D::intersect(InterContext& interContext) const {
+  return interContext.ray.intersect(_center, _radius, interContext.tmpPoint, interContext.tmpNormal);
 }
 
 // Plan implem
@@ -109,22 +110,22 @@ PlanObject3D::~PlanObject3D() {
 
 }
 
-bool PlanObject3D::intersect(const Ray& ray, Vec3Df& intersectionPoint, Vec3Df& intersectionNormal) const {
-  float denominator = Vec3Df::dotProduct(_normal, ray.getDirection());
+bool PlanObject3D::intersect(InterContext& interContext) const {
+  float denominator = Vec3Df::dotProduct(_normal, interContext.ray.getDirection());
   if (denominator > -EPSILON && denominator < EPSILON) {
     // ray is parallel to plan
     return false;
   }
 
-  float t = Vec3Df::dotProduct(_normal, _point - ray.getOrigin()) / denominator;
+  float t = Vec3Df::dotProduct(_normal, _point - interContext.ray.getOrigin()) / denominator;
 
   if (t < 0.f) {
     // plan is behind ray
     return false;
   }
 
-  intersectionPoint = ray.getOrigin() + t * ray.getDirection();
-  intersectionNormal = _normal;
+  interContext.tmpPoint = interContext.ray.getOrigin() + t * interContext.ray.getDirection();
+  interContext.tmpNormal = _normal;
 
   return true;
 }

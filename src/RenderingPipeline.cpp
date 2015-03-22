@@ -10,7 +10,6 @@ RenderingPipeline::RenderingPipeline(Model* model) : _model(model) {
 #ifdef NB_THREADS
   _renderer = new Renderer*[NB_THREADS];
   for (int i=0; i<NB_THREADS; i++) {
-    std::cout << "Creating one new renderer" << std::endl;
     _renderer[i] = new Renderer(_model->getScene(), _model->getCamera());
   }
 #else

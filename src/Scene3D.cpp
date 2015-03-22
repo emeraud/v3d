@@ -49,19 +49,19 @@ std::vector<Light> Scene3D::getLights() {
   return lights;
 }
 
-bool Scene3D::getIntersected(const Ray& ray, Vec3Df& intersectionPoint, Vec3Df& intersectionNormal, const Object3D* &object) const {
+bool Scene3D::getIntersected(InterContext& interContext) const {
   Vec3Df tempIntersectionPoint, tempIntersectionNormal;
   float sqDist = FLT_MAX;
   float sqMinDist = FLT_MAX;
 
   for (std::vector<Object3D*>::const_iterator it = _objects.begin(); it != _objects.end(); ++it) {
-    if ((*it)->intersect(ray, tempIntersectionPoint, tempIntersectionNormal)) {
-      sqDist = Vec3Df::squaredDistance(tempIntersectionPoint, ray.getOrigin());
+    if ((*it)->intersect(interContext)) {
+      sqDist = Vec3Df::squaredDistance(interContext.tmpPoint, interContext.ray.getOrigin());
       if (sqDist < sqMinDist) {
         sqMinDist = sqDist;
-        intersectionPoint = tempIntersectionPoint;
-        intersectionNormal = tempIntersectionNormal;
-        object = (*it);
+        interContext.point = interContext.tmpPoint;
+        interContext.normal = interContext.tmpNormal;
+        interContext.object = (*it);
       }
     }
   }
@@ -70,15 +70,14 @@ bool Scene3D::getIntersected(const Ray& ray, Vec3Df& intersectionPoint, Vec3Df& 
 }
 
 
-bool Scene3D::isShadow(const Ray& ray, const Object3D* &object, float sqMaxLength) const {
-  Vec3Df tempIntersectionPoint, tempIntersectionNormal;
+bool Scene3D::isShadow(InterContext& interContext, float sqMaxLength) const {
   for (std::vector<Object3D*>::const_iterator it = _objects.begin(); it != _objects.end(); ++it) {
-    if ((*it) == object) {
+    if ((*it) == interContext.object) {
       // ignore source object
       continue;
     }
-    if ((*it)->intersect(ray, tempIntersectionPoint, tempIntersectionNormal)) {
-      if (Vec3Df::squaredDistance(tempIntersectionPoint, ray.getOrigin()) < sqMaxLength) {
+    if ((*it)->intersect(interContext)) {
+      if (Vec3Df::squaredDistance(interContext.tmpPoint, interContext.ray.getOrigin()) < sqMaxLength) {
         return true;
       }
     }

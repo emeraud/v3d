@@ -4,6 +4,7 @@
 #include "Tessellation3D.hpp"
 #include "KDTree.hpp"
 #include "Material.hpp"
+#include "InterContext.hpp"
 
 class Object3D {
   public:
@@ -16,7 +17,7 @@ class Object3D {
     void setMaterial(const Material& material);
 
   public:
-    virtual bool intersect(const Ray& ray, Vec3Df& intersectionPoint, Vec3Df& intersectionNormal) const = 0;
+    virtual bool intersect(InterContext& interContext) const = 0;
 
   protected:
     Material          _material;
@@ -32,7 +33,7 @@ class MeshObject3D : public Object3D {
     void init();
 
   public:
-    virtual bool intersect(const Ray& ray, Vec3Df& intersectionPoint, Vec3Df& intersectionNormal) const;
+    virtual bool intersect(InterContext& interContext) const;
 
   private:
     Tessellation3D*   _tessellation;
@@ -45,7 +46,7 @@ class SphereObject3D : public Object3D {
     virtual ~SphereObject3D();
 
   public:
-    virtual bool intersect(const Ray& ray, Vec3Df& intersectionPoint, Vec3Df& intersectionNormal) const;
+    virtual bool intersect(InterContext& interContext) const;
 
   private:
     Vec3Df    _center;
@@ -58,7 +59,7 @@ class PlanObject3D : public Object3D {
     virtual ~PlanObject3D();
 
   public:
-    virtual bool intersect(const Ray& ray, Vec3Df& intersectionPoint, Vec3Df& intersectionNormal) const;
+    virtual bool intersect(InterContext& interContext) const;
 
   private:
     Vec3Df    _point;

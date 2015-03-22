@@ -49,7 +49,7 @@ int main(int argc, char *argv[]) {
       std::cout << "... play" << std::endl;
     }
   } else {
-    play(availableScenes["test"]); 
+    play(availableScenes["Bunny_40Frames"]); 
   }
 
   for(std::map<std::string,Model*>::const_iterator it = availableScenes.begin(); it!=availableScenes.end(); ++it) {
