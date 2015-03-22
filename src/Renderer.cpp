@@ -53,9 +53,9 @@ void Renderer::renderPixel(int x, int y, Pixel& pixel) {
     Light light = _scene->getLights()[i];
     Vec3Df intersectionPoint, intersectionNormal;
     if (_interContext.ray.intersect(light.getPos(), 0.01f, intersectionPoint, intersectionNormal)) {
-      pixel.r = 50;
-      pixel.g = 0;
-      pixel.b = 0;
+      pixel.r = light.getColor()[0] * 255;
+      pixel.g = light.getColor()[1] * 255;
+      pixel.b = light.getColor()[2] * 255;
       return;
     }
   }
