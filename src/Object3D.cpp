@@ -81,7 +81,6 @@ bool MeshObject3D::intersect(InterContext& interContext) const {
   if (minDist != FLT_MAX) {
     interContext.tmpPoint = interContext.ray.getOrigin() + minDist * interContext.ray.getDirection();
     interContext.tmpNormal = (1.f - uI -vI) * bestTriangle.v0->normal + uI * bestTriangle.v1->normal + vI * bestTriangle.v2->normal;
-    interContext.tmpNormal.normalize();
     return true;
   }
 

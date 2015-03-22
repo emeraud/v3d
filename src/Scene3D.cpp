@@ -50,7 +50,6 @@ std::vector<Light> Scene3D::getLights() {
 }
 
 bool Scene3D::getIntersected(InterContext& interContext) const {
-  Vec3Df tempIntersectionPoint, tempIntersectionNormal;
   float sqDist = FLT_MAX;
   float sqMinDist = FLT_MAX;
 
@@ -61,6 +60,7 @@ bool Scene3D::getIntersected(InterContext& interContext) const {
         sqMinDist = sqDist;
         interContext.point = interContext.tmpPoint;
         interContext.normal = interContext.tmpNormal;
+        interContext.normal.normalize();
         interContext.object = (*it);
       }
     }
