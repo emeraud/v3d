@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 2.6)
 
-project(v3d CXX)
+project(v3d C CXX)
 
-set(CMAKE_THREAD_PREFER_PTHREAD TRUE)
+#set(CMAKE_THREAD_PREFER_PTHREAD TRUE)
 set(EXECUTABLE_OUTPUT_PATH bin/${CMAKE_BUILD_TYPE})
 SET(CMAKE_CXX_FLAGS "-pthread -std=c++0x -O3")
 
