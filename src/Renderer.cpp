@@ -9,6 +9,9 @@
 #include "Ray.hpp"
 #include "BRDF.hpp"
 
+#include "PixelBlock.hpp"
+#include "Dispatcher.hpp"
+
 Renderer::Renderer(Scene3D* scene, Camera* camera) : _scene(scene), _camera(camera) {
   renderByBlock = false;
 }
@@ -100,3 +103,15 @@ void Renderer::renderLine(int x, Pixel** pixelGrid) {
   }
   renderByBlock = false;
 }
+
+void Renderer::render(Dispatcher* dispatcher, Pixel** pixelGrid) {
+  PixelBlock pixelBlock;
+  pixelBlock._threadId = _threadId;
+  while (dispatcher->getNextBlock(pixelBlock)) {
+    int x=0, y=0;
+    while (pixelBlock.getNext(x, y)) {
+      renderPixel(x, y, pixelGrid[x][y]);
+    }
+  }
+}
+

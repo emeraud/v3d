@@ -47,6 +47,7 @@ void AnimationManager::move() {
 
 Pixel** AnimationManager::getNextImage() {
   move();
+  std::cout << "Next image!" << std::endl;
   return _renderingPipeline.render();
 }
 

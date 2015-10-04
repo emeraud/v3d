@@ -5,12 +5,14 @@
 #include "Types.hpp"
 #include "Model.hpp"
 #include "Renderer.hpp"
+#include "Dispatcher.hpp"
 
 RenderingPipeline::RenderingPipeline(Model* model) : _model(model) {
 #ifdef NB_THREADS
   _renderer = new Renderer*[NB_THREADS];
   for (int i=0; i<NB_THREADS; i++) {
     _renderer[i] = new Renderer(_model->getScene(), _model->getCamera());
+    _renderer[i]->_threadId = i;
   }
 #else
   _renderer = new Renderer(_model->getScene(), _model->getCamera());
@@ -45,22 +47,13 @@ RenderingPipeline::~RenderingPipeline() {
 Pixel** RenderingPipeline::render() {
 #ifdef NB_THREADS
   std::thread threads[NB_THREADS];
-  int currentLine = 0;
-  int maxThreadId = 0;
+  Dispatcher dispatcher(_pixelGrid, SCREEN_WIDTH-1, SCREEN_HEIGHT-1);
+  for (int i=0; i<NB_THREADS; i++) {
+    threads[i] = std::thread(&Renderer::render, _renderer[i], &dispatcher, _pixelGrid);
+  }
 
-  while (currentLine < SCREEN_WIDTH) {
-    maxThreadId = 0;
-    for (int i=0; i<NB_THREADS; i++) {
-      if (currentLine >= SCREEN_WIDTH) break;
-      //std::cout << "currentLine " << currentLine << " for thread=" << i << std::endl;
-      threads[i] = std::thread(&Renderer::renderLine, _renderer[i], currentLine, _pixelGrid);
-      maxThreadId++; 
-      currentLine++;
-    }
-
-    for (int i=0; i<maxThreadId; i++) {
-      threads[i].join();
-    }
+  for (int i=0; i<NB_THREADS; i++) {
+    threads[i].join();
   }
 #else
   for (int i=0; i<SCREEN_WIDTH; i++) {

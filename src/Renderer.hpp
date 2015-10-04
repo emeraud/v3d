@@ -5,8 +5,10 @@
 #include "Vec3D.h"
 #include "InterContext.hpp"
 
+
 class Scene3D;
 class Camera;
+class Dispatcher;
 
 /* Thread safe rendering class */
 class Renderer {
@@ -17,6 +19,7 @@ class Renderer {
   public:
     void renderPixel(int x, int y, Pixel& pixel);
     void renderLine(int x, Pixel** pixelGrid);
+    void render(Dispatcher* dispatcher, Pixel** pixelGrid);
 
   private:
     void computeConstants();
@@ -36,6 +39,10 @@ class Renderer {
     Vec3Df      _stepX;
     Vec3Df      _startY;
     Vec3Df      _stepY;
+
+  public:
+    // for debug
+    int _threadId;
 };
 
 #endif
