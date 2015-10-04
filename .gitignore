@@ -5,4 +5,5 @@ models/
 v3d
 CMakeCache.txt
 CMakeFiles/
+cmake_install.cmake
 Makefile
