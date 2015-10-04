@@ -1,5 +1,8 @@
-*.swp
 build/
 biblio/
 profiling/
+models/
 v3d
+CMakeCache.txt
+CMakeFiles/
+Makefile
