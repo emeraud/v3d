@@ -6,7 +6,7 @@ Dispatcher::Dispatcher(Pixel** pixelGrid, int xMax, int yMax)
   : _xMax(xMax), _yMax(yMax) {
   _x = 0;
   _y = 0;
-  _step = 10;
+  _step = 25;
 }
 
 Dispatcher::~Dispatcher() {
