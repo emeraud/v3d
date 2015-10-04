@@ -8,4 +8,23 @@
 #define ENABLE_SHADOW 1
 #define DISPLAY_LIGHTS_SOURCES 1
 
+
+#include "../external/pugixml/pugixml.hpp"
+
+
+class Config {
+public:
+  Config();
+  ~Config();
+
+public:
+  int width;
+  int height;
+
+  bool withShadow;
+  bool withLightSource;
+
+  int nbThreads;
+};
+
 #endif

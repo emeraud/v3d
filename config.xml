@@ -1,0 +1,9 @@
+<v3d>
+  <display>
+    <screen width="640" height="480" />
+  </display>
+  <render withShadow="true" withLightSource="true" />
+  <tuning>
+    <threading nbThreads="16" />
+  </tuning>
+</v3d>

@@ -7,12 +7,15 @@
 #include "ModelHelper.hpp"
 #include "AnimationManager.hpp"
 
+#include "Config.hpp"
+
 
 #undef main // SDL...
 
 void play(Model* model);
 
 int main(int argc, char *argv[]) {
+  Config config;
   std::map<std::string,Model*> availableScenes = ModelHelper::getModels(); 
 
   if (argc == 3) {
