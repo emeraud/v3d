@@ -8,7 +8,7 @@
 #ifndef MATERIAL_HPP
 #define MATERIAL_HPP
 
-#include "Vec3D.h"
+#include "geo/Vec3D.h"
 
 // Ce modèle suppose une couleur spéculaire blanche (1.0, 1.0, 1.0)
 

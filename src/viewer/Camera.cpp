@@ -1,6 +1,6 @@
 #include "Camera.hpp"
 
-#include "Config.hpp"
+#include "config/Config.hpp"
 
 Camera::Camera() {
   _pos = Vec3Df(0.f,0.f,0.f);

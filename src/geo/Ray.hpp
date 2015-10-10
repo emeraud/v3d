@@ -2,7 +2,7 @@
 #define RAY_HPP
 
 #include <cfloat>
-#include "Vec3D.h"
+#include "geo/Vec3D.h"
 
 #define EPSILON 0.000001f
 

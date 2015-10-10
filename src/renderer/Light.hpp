@@ -11,7 +11,7 @@
 #include <iostream>
 #include <vector>
 
-#include "Vec3D.h"
+#include "geo/Vec3D.h"
 
 class Light {
 public:

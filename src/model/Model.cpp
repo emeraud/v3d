@@ -1,7 +1,7 @@
 #include "Model.hpp"
 
 #include "Scene3D.hpp"
-#include "Camera.hpp"
+#include "viewer/Camera.hpp"
 
 Model::Model() : _nbFrames(10), _activateBench(false) {
   _scene = new Scene3D(); 

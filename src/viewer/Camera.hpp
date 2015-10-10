@@ -1,7 +1,7 @@
 #ifndef CAMERA_HPP
 #define CAMERA_HPP
 
-#include "Vec3D.h"
+#include "geo/Vec3D.h"
 
 class Camera {
   public:

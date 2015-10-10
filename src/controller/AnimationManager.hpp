@@ -4,7 +4,7 @@
 #include "SDL.h"
 
 #include "Types.hpp"
-#include "RenderingPipeline.hpp"
+#include "renderer/RenderingPipeline.hpp"
 
 class Viewer;
 class Model;

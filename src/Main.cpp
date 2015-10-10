@@ -3,11 +3,11 @@
 #include <map>
 #include <chrono>
 
-#include "Model.hpp"
-#include "ModelHelper.hpp"
-#include "AnimationManager.hpp"
+#include "config/Config.hpp"
+#include "controller/AnimationManager.hpp"
 
-#include "Config.hpp"
+#include "model/Model.hpp"
+#include "model/ModelHelper.hpp"
 
 
 #undef main // SDL...

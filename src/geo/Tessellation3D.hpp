@@ -5,7 +5,7 @@
 
 #include "Types.hpp"
 #include "Triangle.h"
-#include "Vec3D.h"
+#include "geo/Vec3D.h"
 
 struct Vertex {
   Vec3Df                      pos;

@@ -1,7 +1,7 @@
 #ifndef RENDERING_PIPELINE_HPP
 #define RENDERING_PIPELINE_HPP
 
-#include "Config.hpp"
+#include "config/Config.hpp"
 
 class Model;
 class Renderer;

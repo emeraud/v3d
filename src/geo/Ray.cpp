@@ -1,6 +1,6 @@
 #include "Ray.hpp"
 #include "Triangle.h"
-#include "Vec3D.h"
+#include "geo/Vec3D.h"
 
 #include "BoundingBox.hpp"
 

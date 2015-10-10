@@ -4,7 +4,7 @@
 #include <fstream>
 #include <sstream>
 
-#include "Tessellation3D.hpp"
+#include "geo/Tessellation3D.hpp"
 
 Tessellation3D* Connector3D::parseFile(const std::string& fileName) {
   std::ifstream file(fileName.c_str(), std::ios::binary);

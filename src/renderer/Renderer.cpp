@@ -1,14 +1,14 @@
 #include "Renderer.hpp"
 
-#include "Config.hpp"
+#include "config/Config.hpp"
 
-#include "Scene3D.hpp"
-#include "Object3D.hpp"
-#include "Camera.hpp"
+#include "model/Scene3D.hpp"
+#include "model/Object3D.hpp"
+#include "viewer/Camera.hpp"
 
-#include "Ray.hpp"
+#include "geo/Ray.hpp"
+
 #include "BRDF.hpp"
-
 #include "PixelBlock.hpp"
 #include "Dispatcher.hpp"
 

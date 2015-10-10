@@ -1,7 +1,7 @@
 #include "ModelObjectsHelper.hpp"
 
-#include "Tessellation3D.hpp"
-#include "Connector3D.hpp"
+#include "geo/Tessellation3D.hpp"
+#include "parser/Connector3D.hpp"
 
 
 Tessellation3D* ModelObjectsHelper::buildTessellation(std::string path) {

@@ -8,7 +8,10 @@ SET(CMAKE_CXX_FLAGS "-pthread -std=c++0x -O3")
 
 find_package ( SDL REQUIRED )
 find_package ( Threads REQUIRED )
-include_directories(${SDL_INCLUDE_DIR})
+include_directories(
+        ${v3d_SOURCE_DIR}/src      
+        ${SDL_INCLUDE_DIR}
+)
 
 file(
         GLOB_RECURSE

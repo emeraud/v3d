@@ -1,7 +1,7 @@
 #ifndef VIEWER_HPP
 #define VIEWER_HPP
 
-#include "Config.hpp"
+#include "config/Config.hpp"
 #include "Types.hpp"
 
 struct SDL_Surface;

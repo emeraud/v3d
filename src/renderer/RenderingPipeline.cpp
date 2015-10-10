@@ -3,9 +3,10 @@
 #include <thread>
 
 #include "Types.hpp"
-#include "Model.hpp"
 #include "Renderer.hpp"
 #include "Dispatcher.hpp"
+
+#include "model/Model.hpp"
 
 RenderingPipeline::RenderingPipeline(Model* model) : _model(model) {
 #ifdef NB_THREADS

@@ -38,7 +38,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <algorithm>
 #include <cfloat>
 
-#include "Vec3D.h"
+#include "geo/Vec3D.h"
 
 const float BOUNDINGBOX_EPSILON = 0.0001f;
 

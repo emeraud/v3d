@@ -1,7 +1,7 @@
 #ifndef BRDF_HPP
 #define BRDF_HPP
 
-#include "Vec3D.h"
+#include "geo/Vec3D.h"
 #include "Light.hpp"
 #include "Material.hpp"
 

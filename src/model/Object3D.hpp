@@ -1,10 +1,10 @@
 #ifndef OBJECT3D_HPP
 #define OBJECT3D_HPP
 
-#include "Tessellation3D.hpp"
-#include "KDTree.hpp"
-#include "Material.hpp"
-#include "InterContext.hpp"
+#include "geo/Tessellation3D.hpp"
+#include "geo/KDTree.hpp"
+#include "renderer/Material.hpp"
+#include "renderer/InterContext.hpp"
 
 class Object3D {
   public:

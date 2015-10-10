@@ -2,8 +2,6 @@
 
 #include <SDL.h>
 
-#include "Config.hpp"
-
 Viewer::Viewer() {
   
   // sdl initialization

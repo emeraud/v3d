@@ -4,8 +4,8 @@
 #include <climits>
 #include <math.h>
 
-#include "Viewer.hpp"
-#include "Model.hpp"
+#include "viewer/Viewer.hpp"
+#include "model/Model.hpp"
 
 AnimationManager::AnimationManager(Model* model) : _model(model), _renderingPipeline(model), _onMove(true), _onExit(false) {
   _viewer = new Viewer();

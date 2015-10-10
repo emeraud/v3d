@@ -1,9 +1,9 @@
 #ifndef INTERCONTEXT_HPP
 #define INTERCONTEXT_HPP
 
-#include "Ray.hpp"
-#include "Vec3D.h"
-#include "KDTree.hpp" // IntersectedNode, remove this dep if possible
+#include "geo/Ray.hpp"
+#include "geo/Vec3D.h"
+#include "geo/KDTree.hpp" // IntersectedNode, remove this dep if possible
 
 class Object3D;
 

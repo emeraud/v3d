@@ -1,13 +1,13 @@
 #include "ModelScenesHelper.hpp"
 
+#include "ModelObjectsHelper.hpp"
 #include "Object3D.hpp"
 #include "Scene3D.hpp"
-#include "Camera.hpp"
 
-#include "Light.hpp"
-#include "Material.hpp"
+#include "renderer/Light.hpp"
+#include "renderer/Material.hpp"
 
-#include "ModelObjectsHelper.hpp"
+#include "viewer/Camera.hpp"
 
 
 void Scene_Primitives::_configure() {

@@ -4,8 +4,8 @@
 #include <vector>
 
 #include "Object3D.hpp"
-#include "Light.hpp"
-#include "InterContext.hpp"
+#include "renderer/Light.hpp"
+#include "renderer/InterContext.hpp"
 
 class Scene3D {
   public:
