@@ -5,15 +5,13 @@ Real time raytracer
 
 ###How to build?
 
-* Use regular cmake
-* On unix you, you might use provided script
+* Use regular cmake, note than on unix, you might use provided script
 ```
 ./scripts/cmake.sh
 ```
-* Cmake example:
+* Make & run:
 ```
-cmake -DCMAKE_BUILD_TYPE=Release . -G"Unix Makefiles"
 make
-./v3d
+./bin/Release/v3d
 ```
-
+* Update config.xml to modify settings
