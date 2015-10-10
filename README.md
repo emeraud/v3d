@@ -3,21 +3,17 @@ v3d
 
 Real time raytracer
 
-#To build
+###How to build?
 
-##Unix
-
-###Using provided script,
+* Use regular cmake
+* On unix you, you might use provided script
+```
 ./scripts/cmake.sh
-
-###Using cmake
+```
+* Cmake example:
+```
 cmake -DCMAKE_BUILD_TYPE=Release . -G"Unix Makefiles"
 make
 ./v3d
-
-To debug,
-cmake -DCMAKE_BUILD_TYPE=Debug . -G"Unix Makefiles"
-
-
-
+```
 
